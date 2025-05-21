@@ -1,58 +1,17 @@
-;mario : 
-;	- Move 3 Objetos com Delays diferentes
-;	- Nao apaga o cenario
-;	- Le teclado para movimentar a mario
-;	- Declara Tabela de nr. Randoicos
-;	- Le Tabela de nr. Randomico para movimentar o Alien
-;	- Se Tiro ou Alien passar por cima, nao apaga a mario
-;	- Nao fica piscando, pois so' redezenha se pos != posAnt
-;   - Senario Colorido!!!!!
-;	- Loop principal segue estrutura abaixo:
-
-
-;	Loop:
-;		if (mod(c/10)==0
-;			{	
-;				Recalculamario (posmario = Teclado...)
-;				If (posmario != posAntmario)
-;				{ 	Apagamario: Print Tela(posAntmario + posAntmario/40) , posAntmario
-;				 	Desenhamario  (posAntmario = posmario)
-;				}
-;			}
-;		if (mod(c/5)==0
-;			{	
-;				RecalculaAlien (posAlien = Rand...)
-;				If (posAlien != posAntAlien)
-;				{ 	ApagaAlien: Print Tela(posAntAlien + posAntAlien/40) , posAntAlien
-;				 	DesenhaAlien  (posAntAlien = posAlien)
-;				}
-;			}
-;		if (mod(c/2)==0
-;			{	
-;				RecalculaTiro (posTiro = posTiro + IncTiro...)
-;				If (posTiro != posAntTiro)
-;				{ 	ApagaTiro: Print Tela(posAntTiro + posAntTiro/40) , posAntTiro
-;				 	DesenhaTiro  (posAntTiro = posTiro)
-;				}
-;			}
-;		
-;		Delay
-;		c++
-;		goto Loop
-
-
-jmp main
+jmp inicio
 ;barril
 posB1: var #1
 posAntB1: var #1
-IncRandBarril: var #1
 
 posB2: var #1
 posAntB2: var #1
-IncRandBarril2: var #1
 
+posB3: var #1
+posAntB3: var #1
 
-
+IncRandB3: var #1
+IncRandB2: var #1
+IncRandB1: var #1
 RandBarril: var #6
     static RandBarril + #0, #247
     static RandBarril + #1, #275
@@ -65,14 +24,13 @@ RandBarril: var #6
 
 Msn0: string "V O C E   V E N C E U !!!"
 Msn1: string "Quer jogar novamente? <s/n>"
+Msn2: string "Press ENTER to start"
 
-Letra: var #1		; Contem a letra que foi digitada
+Letra: var #1			; Contem a letra que foi digitada
 
-posmario: var #1			; Contem a posicao atual da mario
+posmario: var #1		; Contem a posicao atual da mario
 posAntmario: var #1		; Contem a posicao anterior da mario
 
-posAlien: var #1		; Contem a posicao atual do Alien
-posAntAlien: var #1		; Contem a posicao anterior do Alien
 
 posTiro: var #1			; Contem a posicao atual do Tiro
 posAntTiro: var #1		; Contem a posicao anterior do Tiro
@@ -112,11 +70,34 @@ Rand : var #30			; Tabela de nr. Randomicos entre 0 - 7
 	static Rand + #28, #1
 	static Rand + #29, #1
 
+inicio:
+
+	loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn R2, #1536  			; cor branca!
+	call ImprimeTela2
 
 
+	;loadn r0, #247 ;onde inicia a frase
+    ;loadn r1, #Msn2
+	;loadn r2, #0 ;se quiser add cor 0 é nada
+    ;call ImprimeStr2
 
+Loopinicio:
+    inchar r4
+    loadn r1, #13 ;tecla enter
+    
+    inc r2 ;faz a soma aleatória para dar o rand
 
+    cmp r4, r1
+    jne Loopinicio
 
+    loadn r5, #5
+    mod r3, r2, r5
+
+    store IncRandB1, r3
+    
+    call ApagaTela
+    jmp main
 
 ;Codigo principal
 main:
@@ -133,11 +114,7 @@ main:
 	loadn R2, #2048; COR DA ESCADA
 	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
 
-	loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #256   			; cor branca!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-
-	Loadn R0, #1120			
+	Loadn R0, #1119			
 	store posmario, R0		; Zera Posicao Atual da mario
 	store posAntmario, R0	; Zera Posicao Anterior da mario
 	
@@ -145,9 +122,6 @@ main:
 	store posTiro, R0		; Zera Posicao Atual do Tiro
 	store posAntTiro, R0	; Zera Posicao Anterior do Tiro
 	
-	Loadn R0, #120
-	store posAlien, R0		; Zera Posicao Atual do Alien
-	store posAntAlien, R0	; Zera Posicao Anterior do Alien
 	
 	Loadn R0, #0			; Contador para os Mods	= 0
 	loadn R2, #0			; Para verificar se (mod(c/10)==0
@@ -155,17 +129,6 @@ main:
 	loadn r0, #98
     store posB1, r0
     store posAntB1, r0
-    
-    loadn r1, #0
-    store IncRandBarril, r1
-
-	loadn r0, #98
-    store posB2, r0
-    store posAntB2, r0
-    
-    loadn r1, #1
-    store IncRandBarril2, r1
-
 
 	Loop:
 	
@@ -174,11 +137,7 @@ main:
 		cmp R1, R2		; if (mod(c/10)==0
 		ceq Movemario	; Chama Rotina de movimentacao da mario
 	
-		loadn R1, #30
-		mod R1, R0, R1
-		cmp R1, R2		; if (mod(c/30)==0
-		ceq MoveAlien	; Chama Rotina de movimentacao do Alien
-	
+
 		loadn R1, #2
 		mod R1, R0, R1
 		cmp R1, R2		; if (mod(c/2)==0
@@ -187,13 +146,17 @@ main:
 		loadn r1, #10
 		mod r1, r0, r1
 		cmp r1, r2
-		ceq MoveBarril
-
-		loadn r1, #10
-		mod r1, r0, r1
-		cmp r1, r2
-		ceq MoveBarril2
+		ceq MoveB1
     
+        loadn r1, #10 ;Começa quando for um múltiplo de 10
+        mod r1, r0, r1
+        cmp r1, r2 
+        ceq MoveB2
+
+        loadn r1, #15
+        mod r1, r0, r1
+        cmp r1, r2
+        ceq MoveB3
 
 		call Delay
 		inc R0 	;c++
@@ -204,133 +167,19 @@ main:
 fim:
     halt
 
-;--------------------------
-MoveBarril: ;Para ficar mais organizado
-	push r0
-	push r1
-	push r2
-	push r3
-
-	call PosicaoInicialBarril
-	call CairBarril
-
-	pop r3
-	pop r2
-	pop r1
-	pop r0
-	rts
-
-; Escolhe posição aleatória para o barril com base na tabela
-PosicaoInicialBarril:
-	push r0
-	push r1
-	push r2
-	push r3
-
-	load r1, IncRandBarril
-
-;Começa o "switch-case"
-	loadn r0, #0
-	cmp r1, r0
-	jeq Escolhe0
-	
-    loadn r0, #1
-	cmp r1, r0
-	jeq Escolhe1
-	
-    loadn r0, #2
-	cmp r1, r0
-	jeq Escolhe2
-	
-    loadn r0, #3
-	cmp r1, r0
-	jeq Escolhe3
-	
-    loadn r0, #4
-	cmp r1, r0
-	jeq Escolhe4
-	
-    loadn r0, #5
-	cmp r1, r0
-	jeq Escolhe5
-
-Escolhe0:
-	loadn r3, #247
-	jmp Continua
-
-Escolhe1:
-	loadn r3, #275
-	jmp Continua
-
-Escolhe2:
-	loadn r3, #263
-	jmp Continua
-
-Escolhe3:
-	loadn r3, #246
-	jmp Continua
-
-Escolhe4:
-	loadn r3, #271
-	jmp Continua
-
-Escolhe5:
-	loadn r3, #244
-	jmp Continua
-
-Continua:
-	store posB1, r3
-
-	inc r1
-	loadn r2, #6
-	cmp r1, r2
-	jeq ZeraIndice
-
-ArmazenaIndice:
-	store IncRandBarril, r1
-	pop r3
-	pop r2
-	pop r1
-	pop r0
-	rts
-
-ZeraIndice:
-	loadn r1, #0
-	jmp ArmazenaIndice
-
-; Faz o barril cair até o chão
-CairBarril:
+;-----------------------------
+;         BARRIL 1 
+;-----------------------------
+MoveB1:
     push r0
     push r1
     push r2
     push r3
 
-    load r0, posB1
-    call DesenhaBarril
-
-LoopCair:
-    loadn r1, #40
-    add r2, r0, r1         ; r2 = próxima linha
-
-;Comparação se chegou no chão 
-    div r3, r2, r1         ; r3 = linha que o barril está
-    loadn r1, #27
-    cmp r3, r1
-    jeq FimCair
-
-    call ApagaBarril
-    store posAntB1, r0
-    store posB1, r2
-    
-    call DesenhaBarril
-    
-    call Delay1
-
-    mov r0, r2
-    jmp LoopCair
-
-FimCair:
-    call ApagaBarril
+    call CmpIncB1B2
+    call CmpIncB1B3
+    call PosicaoInicialB1
+    call CairB1
 
     pop r3
     pop r2
@@ -338,8 +187,193 @@ FimCair:
     pop r0
     rts
 
-; Desenha o barril na tela
-DesenhaBarril:
+CmpIncB1B2:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB1
+    cmp r0, r2
+    jne RtsCmpIncB1B2          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB2             ;confere se B2 vai cair ou não
+    cmp r0, r4
+    jne IncRandB2atual1     ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB2         ;já é a nova posição que o B1 vai cair
+    load r1, IncRandB1   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB1B2          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add12                   ;se não, pode só somar 1 no IncRandB2
+
+    loadn r1, #0
+    store IncRandB1, r1        ;zera o IncRandB2
+    jmp RtsCmpIncB1B2
+
+    Add12:
+        inc r1
+        store IncRandB1, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB1B2
+
+    IncRandB2atual1:
+        load r4, IncRandB2         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub12                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB1         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB1B2          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB1, r4
+        jmp RtsCmpIncB1B2
+        
+        Sub12:
+            dec r4                     ;r4--
+            load r1, IncRandB1         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB1B2
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB12
+
+            ;Zera o IncRandB1
+            loadn r1, #0
+            store IncRandB1, r1
+            jmp RtsCmpIncB1B2
+        
+        SomaIncRandB12:
+            inc r1
+            store IncRandB1, r1
+
+        RtsCmpIncB1B2:
+            rts
+
+CmpIncB1B3:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB1
+    cmp r0, r2
+    jne RtsCmpIncB1B3          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB3             ;confere se B3 vai cair ou não
+    cmp r0, r4
+    jne IncRandB3atual1     ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB3         ;já é a nova posição que o B1 vai cair
+    load r1, IncRandB1   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB1B3          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add13                   ;se não, pode só somar 1 no IncRandB2
+
+    loadn r1, #0
+    store IncRandB1, r1        ;zera o IncRandB2
+    jmp RtsCmpIncB1B3
+
+    Add13:
+        inc r1
+        store IncRandB1, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB1B3
+
+    IncRandB3atual1:
+        load r4, IncRandB3         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub13                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB1         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB1B3          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB1, r4
+        jmp RtsCmpIncB1B3
+        
+        Sub13:
+            dec r4                     ;r4--
+            load r1, IncRandB1         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB1B3
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB13
+
+            ;Zera o IncRandB1
+            loadn r1, #0
+            store IncRandB1, r1
+            jmp RtsCmpIncB1B3
+        
+        SomaIncRandB13:
+            inc r1
+            store IncRandB1, r1
+
+        RtsCmpIncB1B3:
+            rts
+
+PosicaoInicialB1:
+    loadn r0, #0
+    load r2, posB1
+    cmp r0, r2
+    jne RtsPosicaoInicialB1
+    
+    load r1, IncRandB1         ;r1 = índice atual (0 a 5)
+    loadn r3, #RandBarril      ;r3 = endereço base da tabela
+    add r3, r3, r1             ;r3 = endereço de RandBarril[r1]
+    loadi r2, r3               ;r2 = RandBarril[r1] (posição aleatória)
+    store posB1, r2            ;define nova posição do barril
+
+    inc r1                     ;vai pra próxima coluna
+
+    loadn r0, #6
+    cmp r1, r0                 ;Compara se o índice já chegou no fim da tabela
+    jne StoreIncB1             
+
+    ;ZeraIndice:
+    loadn r1, #0
+
+    StoreIncB1:
+        store IncRandB1, r1 ;Ele armazena o novo índice  
+    
+    RtsPosicaoInicialB1:
+        rts
+
+CairB1:
+    load r0, posB1
+    call ApagaB1
+
+    loadn r1, #40
+    add r2, r0, r1         ; r2 = próxima linha
+
+    ;Comparação se chegou no chão 
+    div r3, r2, r1         ; r3 = linha que o barril está
+    loadn r1, #27
+    cmp r3, r1
+    jeq NochaoB1
+
+    call DesenhaB1
+    store posAntB1, r0     
+    store posB1, r2     
+
+    jmp RtsCairB1
+
+    NochaoB1:
+        loadn r0, #0
+        store posB1, r0
+    
+    RtsCairB1:
+        rts
+
+;-----------------------------------
+;     Desenha e Apaga Barril 1
+;-----------------------------------
+DesenhaB1:
     push r0
     push r1
 
@@ -353,7 +387,7 @@ DesenhaBarril:
     rts
 
 ; Apaga o barril da posição anterior
-ApagaBarril:
+ApagaB1:
     push R0
 	push R1
 	push R2
@@ -365,7 +399,7 @@ ApagaBarril:
 	
 	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
 
-	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	add R2, R1, r0	; R2 = Tela1Linha0 + posAnt
 	loadn R4, #40
 	div R3, R0, R4	; R3 = posAnt/40
@@ -383,161 +417,229 @@ ApagaBarril:
 	pop R0
 	rts
 
-;----------------------------------------------------------------------------------------------------------------------------
-;
-;														BARRIL 2
-;
-;
-
-MoveBarril2: ;Para ficar mais organizado
-	push r0
-	push r1
-	push r2
-	push r3
-
-	call PosicaoInicialBarril2
-	call CairBarril
-
-	pop r3
-	pop r2
-	pop r1
-	pop r0
-	rts
-
-; Escolhe posição aleatória para o barril com base na tabela
-PosicaoInicialBarril2:
-	push r0
-	push r1
-	push r2
-	push r3
-
-	load r1, IncRandBarril2
-
-;Começa o "switch-case"
-	loadn r0, #0
-	cmp r1, r0
-	jeq Escolhe1
-	
-    loadn r0, #1
-	cmp r1, r0
-	jeq Escolhe1
-	
-    loadn r0, #2
-	cmp r1, r0
-	jeq Escolhe2
-	
-    loadn r0, #3
-	cmp r1, r0
-	jeq Escolhe3
-	
-    loadn r0, #4
-	cmp r1, r0
-	jeq Escolhe4
-	
-    loadn r0, #5
-	cmp r1, r0
-	jeq Escolhe5
-
-Escolhe0:
-	loadn r3, #247
-	jmp Continua
-
-Escolhe1:
-	loadn r3, #275
-	jmp Continua
-
-Escolhe2:
-	loadn r3, #263
-	jmp Continua
-
-Escolhe3:
-	loadn r3, #246
-	jmp Continua
-
-Escolhe4:
-	loadn r3, #271
-	jmp Continua
-
-Escolhe5:
-	loadn r3, #244
-	jmp Continua
-
-Continua:
-	store posB2, r3
-
-	inc r1
-	loadn r2, #6
-	cmp r1, r2
-	jeq ZeraIndice2
-
-ArmazenaIndice2:
-	store IncRandBarril2, r1
-	pop r3
-	pop r2
-	pop r1
-	pop r0
-	rts
-
-ZeraIndice2:
-	loadn r1, #0
-	jmp ArmazenaIndice2
-
-; Faz o barril cair até o chão
-CairBarril:
+;-----------------------------
+;         BARRIL 2
+;-----------------------------
+MoveB2:
     push r0
     push r1
     push r2
     push r3
+    push r4
 
-    load r0, posB2
-    call DesenhaBarril2
+    call CmpIncB2B1 ;Ele compara os índices de B2 e B1, se iguais, ele recalcula o 2
+    call CmpIncB2B3
+    call PosicaoInicialB2
+    call CairB2
 
-LoopCair:
-    loadn r1, #40
-    add r2, r0, r1         ; r2 = próxima linha
-
-;Comparação se chegou no chão 
-    div r3, r2, r1         ; r3 = linha que o barril está
-    loadn r1, #27
-    cmp r3, r1
-    jeq FimCair
-
-    call ApagaBarril2
-    store posAntB2, r0
-    store posB2, r2
-    
-    call DesenhaBarril2
-    
-    call Delay1
-
-    mov r0, r2
-    jmp LoopCair
-
-FimCair2:
-    call ApagaBarril2
-
+    pop r4
     pop r3
     pop r2
     pop r1
     pop r0
     rts
 
-; Desenha o barril na tela
-DesenhaBarril2:
+CmpIncB2B1:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB2
+    cmp r0, r2
+    jne RtsCmpIncB2B1          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB1             ;confere se B1 vai cair ou não
+    cmp r0, r4
+    jne IncRandB1atual2     ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB1         ;já é a nova posição que o B1 vai cair
+    load r1, IncRandB2   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB2B1          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add21                   ;se não, pode só somar 1 no IncRandB2
+
+    loadn r1, #0
+    store IncRandB2, r1        ;zera o IncRandB2
+    jmp RtsCmpIncB2B1
+
+    Add21:
+        inc r1
+        store IncRandB2, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB2B1
+
+    IncRandB1atual2:
+        load r4, IncRandB1         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub21                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB2         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB2B1          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB2, r4
+        jmp RtsCmpIncB2B1
+        
+        Sub21:
+            dec r4                     ;r4--
+            load r1, IncRandB2         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB2B1
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB21
+
+            ;Zera o IncRandB2
+            loadn r1, #0
+            store IncRandB2, r1
+            jmp RtsCmpIncB2B1
+        
+        SomaIncRandB21:
+            inc r1
+            store IncRandB2, r1
+
+        RtsCmpIncB2B1:
+            rts
+
+CmpIncB2B3:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB2
+    cmp r0, r2
+    jne RtsCmpIncB2B3          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB3             ;confere se B3 vai cair ou não
+    cmp r0, r4
+    jne IncRandB3atual2     ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB3         ;já é a nova posição que o B3 vai cair
+    load r1, IncRandB2   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB2B3          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add23                   ;se não, pode só somar 1 no IncRandB2
+
+    loadn r1, #0
+    store IncRandB2, r1        ;zera o IncRandB2
+    jmp RtsCmpIncB2B3
+
+    Add23:
+        inc r1
+        store IncRandB2, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB2B1
+
+    IncRandB3atual2:
+        load r4, IncRandB3         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub23                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB2         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB2B3          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB2, r4
+        jmp RtsCmpIncB2B3
+        
+        Sub23:
+            dec r4                     ;r4--
+            load r1, IncRandB2         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB2B3
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB23
+
+            ;Zera o IncRandB2
+            loadn r1, #0
+            store IncRandB2, r1
+            jmp RtsCmpIncB2B3
+        
+        SomaIncRandB23:
+            inc r1
+            store IncRandB2, r1
+
+        RtsCmpIncB2B3:
+            rts
+
+PosicaoInicialB2:
+    loadn r0, #0              ;confere se ele está caíndo
+    load r2, posB2
+    cmp r0, r2
+    jne RtsPosicaoInicialB2
+    
+    load r1, IncRandB2         ;índice que vai pegar na table
+    loadn r3, #RandBarril      ;r3 = endereço base da tabela
+    add r3, r3, r1             ;r3 = endereço de RandBarril[r1]
+    loadi r2, r3               ;r2 = RandBarril[r1] (posição aleatória)
+    store posB2, r2            ;define nova posição do barril
+
+    inc r1                     ;vai pra próxima coluna
+
+    loadn r0, #6
+    cmp r1, r0                 ;Compara se o índice já chegou no fim da tabela
+    jne StoreIncB2             ;se não chegou, pode já dar store novo índice
+
+    ;ZeraIndice:
+    loadn r1, #0
+
+    StoreIncB2:
+        store IncRandB2, r1    ;Ele armazena o novo índice  
+    
+    RtsPosicaoInicialB2:
+        rts
+
+CairB2:
+    load r0, posB2
+    call ApagaB2       ;se Desenha antes, posAntB2 = posB2, então apaga o desenha que ele fez, logo aparece nada na tela
+
+    loadn r1, #40
+    add r2, r0, r1         ;r2 = próxima linha
+
+    ;Comparação se chegou no chão 
+    div r3, r2, r1         ;r3 = linha que o barril está
+    loadn r1, #27
+    cmp r3, r1
+    jeq NochaoB2           ;se r2 == r3 == 27, ele está no chão, não precisa cair
+
+    call DesenhaB2
+    store posAntB2, r0     
+    store posB2, r2     
+
+    jmp RtsCairB2
+
+    NochaoB2:
+        ;eu fiz isso como um "flag" para saber se ele ainda está caíndo ou não
+        loadn r0, #0        ;poderia ser outro número, mas teria que iniciar ele lá no main, eu iniciei com 0
+        store posB2, r0
+    
+    RtsCairB2:
+        rts
+
+;-----------------------------------
+;     Desenha e Apaga Barril 2
+;-----------------------------------
+DesenhaB2: 
     push r0
     push r1
 
-    loadn r1, #'L'
+    loadn r1, #'Y'
     load r0, posB2
     outchar r1, r0
-    store posAntB2, r0
+    store posAntB2, r0      
 
     pop r1
     pop r0
     rts
 
-; Apaga o barril da posição anterior
-ApagaBarril2:
+ApagaB2:
     push R0
 	push R1
 	push R2
@@ -549,7 +651,7 @@ ApagaBarril2:
 	
 	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
 
-	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	add R2, R1, r0	; R2 = Tela1Linha0 + posAnt
 	loadn R4, #40
 	div R3, R0, R4	; R3 = posAnt/40
@@ -567,8 +669,255 @@ ApagaBarril2:
 	pop R0
 	rts
 
+;-----------------------------
+;         BARRIL 3 
+;-----------------------------
+MoveB3:
+    push r0
+    push r1
+    push r2
+    push r3
 
-;--------------------------------------------------------------------------------------------------------------------------
+    call CmpIncB3B1
+    call CmpIncB3B2
+    call PosicaoInicialB3
+    call CairB3
+
+    pop r3
+    pop r2
+    pop r1
+    pop r0
+    rts
+
+CmpIncB3B1:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB2
+    cmp r0, r2
+    jne RtsCmpIncB3B1          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB1             ;confere se B1 vai cair ou não
+    cmp r0, r4
+    jne IncRandB1atual3     ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB1         ;já é a nova posição que o B1 vai cair
+    load r1, IncRandB3   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB3B1          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add31                   ;se não, pode só somar 1 no IncRandB3
+
+    loadn r1, #0
+    store IncRandB3, r1        ;zera o IncRandB3
+    jmp RtsCmpIncB3B1
+
+    Add31:
+        inc r1
+        store IncRandB3, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB3B1
+
+    IncRandB1atual3:
+        load r4, IncRandB1         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub31                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB3         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB3B1          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB3, r4
+        jmp RtsCmpIncB3B1
+        
+        Sub31:
+            dec r4                     ;r4--
+            load r1, IncRandB3         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB3B1
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB31
+
+            ;Zera o IncRandB3
+            loadn r1, #0
+            store IncRandB3, r1
+            jmp RtsCmpIncB3B1
+        
+        SomaIncRandB31:
+            inc r1
+            store IncRandB3, r1
+
+        RtsCmpIncB3B1:
+            rts
+
+CmpIncB3B2:
+    loadn r0, #0               ;confere se ele está caindo ou vai cair
+    load r2, posB3
+    cmp r0, r2
+    jne RtsCmpIncB3B2          ;se ele está caindo, já dá rts na função
+    
+    load r4, posB2             ;confere se B2 vai cair ou não
+    cmp r0, r4
+    jne IncRandB2atual3        ;se é != 0, ele está caíndo, então o IncRandB1 que a gente analisa é outro
+
+    load r4, IncRandB2         ;já é a nova posição que o B2 vai cair
+    load r1, IncRandB3   
+    cmp r4, r1                 ;compara se eles vão cair no mesmo lugar
+    jne RtsCmpIncB3B2          ;se não, dá rts na função
+
+    loadn r0, #5
+    cmp r0, r4                 ;confere se vai cair na última coluna
+    jne Add32                  ;se não, pode só somar 1 no IncRandB3
+
+    loadn r1, #0
+    store IncRandB3, r1        ;zera o IncRandB3
+    jmp RtsCmpIncB3B2
+
+    Add32:
+        inc r1
+        store IncRandB3, r1    ;se ele ia cair na coluna 0, ele vai cair na 1
+        jmp RtsCmpIncB3B2
+
+    IncRandB2atual3:
+        load r4, IncRandB3         ;está apontando para a próxima coluna já
+        loadn r0, #0
+        cmp r0, r4                 ;eu vejo se a próxima coluna é o 0 (zerou 5 + 1 = 0)
+        jne Sub32                   ;se não é, pode r4-- para saber qual coluna ele está
+
+        loadn r4, #5               ;se zerou, ele estava no fim da tabela
+        load r1, IncRandB3         
+        cmp r4, r1                 ;compara se ambos vão estar no fim da tabela
+        jne RtsCmpIncB3B2          ;se não, rts
+
+        loadn r4, #0               ;zera o índice se eles iriam cair na última coluna (5 + 1 = 0)
+        store IncRandB3, r4
+        jmp RtsCmpIncB3B2
+        
+        Sub32:
+            dec r4                     ;r4--
+            load r1, IncRandB3         
+            cmp r1, r4                 ;compara se são iguais
+            jne RtsCmpIncB3B2
+
+            loadn r4, #5               ;para saber se eles estão no fim da tabela para zerar
+            cmp r1, r4                 
+            jne SomaIncRandB32
+
+            ;Zera o IncRandB3
+            loadn r1, #0
+            store IncRandB3, r1
+            jmp RtsCmpIncB3B2
+        
+        SomaIncRandB32:
+            inc r1
+            store IncRandB3, r1
+
+        RtsCmpIncB3B2:
+            rts
+
+PosicaoInicialB3:
+    loadn r0, #0
+    load r2, posB3
+    cmp r0, r2
+    jne RtsPosicaoInicialB3
+    
+    load r1, IncRandB3         ;r1 = índice atual (0 a 5)
+    loadn r3, #RandBarril      ;r3 = endereço base da tabela
+    add r3, r3, r1             ;r3 = endereço de RandBarril[r1]
+    loadi r2, r3               ;r2 = RandBarril[r1] (posição aleatória)
+    store posB3, r2            ;define nova posição do barril
+
+    inc r1                     ;vai pra próxima coluna
+
+    loadn r0, #6
+    cmp r1, r0                 ;Compara se o índice já chegou no fim da tabela
+    jne StoreIncB3             
+
+    ;ZeraIndice:
+    loadn r1, #0
+
+    StoreIncB3:
+        store IncRandB3, r1 ;Ele armazena o novo índice  
+    
+    RtsPosicaoInicialB3:
+        rts
+
+CairB3:
+    load r0, posB3
+    call ApagaB3
+
+    loadn r1, #40
+    add r2, r0, r1         ; r2 = próxima linha
+
+    ;Comparação se chegou no chão 
+    div r3, r2, r1         ; r3 = linha que o barril está
+    loadn r1, #27
+    cmp r3, r1
+    jeq NochaoB3
+
+    call DesenhaB3
+    store posAntB3, r0     
+    store posB3, r2     
+
+    jmp RtsCairB3
+
+    NochaoB3:
+        loadn r0, #0
+        store posB3, r0
+    
+    RtsCairB3:
+        rts
+
+;-----------------------------------
+;     Desenha e Apaga Barril 3
+;-----------------------------------
+DesenhaB3: 
+    push r0
+    push r1
+
+    loadn r1, #'F'
+    load r0, posB3
+    outchar r1, r0
+    store posAntB3, r0      
+
+    pop r1
+    pop r0
+    rts
+
+ApagaB3:
+    push R0
+	push R1
+	push R2
+	push R3
+	push R4
+	push R5
+
+	load R0, posAntB3	; R0 = posAnt
+	
+	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
+
+	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	add R2, R1, r0	; R2 = Tela1Linha0 + posAnt
+	loadn R4, #40
+	div R3, R0, R4	; R3 = posAnt/40
+	add R2, R2, R3	; R2 = Tela1Linha0 + posAnt + posAnt/40
+	
+	loadi R5, R2	; R5 = Char (Tela(posAnt))
+	
+	outchar R5, R0	; Apaga o Obj na tela com o Char correspondente na memoria do cenario
+	
+	pop R5
+	pop R4
+	pop R3
+	pop R2
+	pop R1
+	pop R0
+	rts
+
 ; Delay de aproximadamente 1 segundo
 Delay1:
     push r0
@@ -624,7 +973,7 @@ Movemario_Apaga:		; Apaga a mario preservando o Cenario!
 	
 	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
 
-	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	add R2, R1, r0	; R2 = Tela1Linha0 + posAnt
 	loadn R4, #40
 	div R3, R0, R4	; R3 = posAnt/40
@@ -736,194 +1085,6 @@ Movemario_Desenha:	; Desenha caractere da mario
 ;----------------------------------
 ;----------------------------------
 
-MoveAlien:
-	push r0
-	push r1
-	
-	call MoveAlien_RecalculaPos
-	
-; So' Apaga e Redezenha se (pos != posAnt)
-;	If (pos != posAnt)	{	
-	load r0, posAlien
-	load r1, posAntAlien
-	cmp r0, r1
-	jeq MoveAlien_Skip
-		call MoveAlien_Apaga
-		call MoveAlien_Desenha		;}
-  MoveAlien_Skip:
-	
-	pop r1
-	pop r0
-	rts
-		
-; ----------------------------
-		
-MoveAlien_Apaga:
-	push R0
-	push R1
-	push R2
-	push R3
-	push R4
-	push R5
-
-	load R0, posAntAlien	; R0 == posAnt
-	load R1, posAntmario		; R1 = posAnt
-	cmp r0, r1
-	jne MoveAlien_Apaga_Skip
-		loadn r5, #':'		; Se o Tiro passa sobre a mario, apaga com um X, senao apaga com o cenario 
-		jmp MoveAlien_Apaga_Fim
-
-  MoveAlien_Apaga_Skip:	
-  
-	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
-	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	add R2, R1, r0	; R2 = Tela1Linha0 + posAnt
-	loadn R4, #40
-	div R3, R0, R4	; R3 = posAnt/40
-	add R2, R2, R3	; R2 = Tela1Linha0 + posAnt + posAnt/40
-	
-	loadi R5, R2	; R5 = Char (Tela(posAnt))
-  
-  MoveAlien_Apaga_Fim:	
-	outchar R5, R0	; Apaga o Obj na tela com o Char correspondente na memoria do cenario
-	
-	pop R5
-	pop R4
-	pop R3
-	pop R2
-	pop R1
-	pop R0
-	rts
-;----------------------------------	
-; sorteia nr. randomico entre 0 - 7
-;					switch rand
-;						case 0 : posNova = posAnt -41
-;						case 1 : posNova = posAnt -40
-;						case 2 : posNova = posAnt -39
-;						case 3 : posNova = posAnt -1
-;						case 4 : posNova = posAnt +1
-;						case 5 : posNova = posAnt +39
-;						case 6 : posNova = posAnt +40
-;						case 7 : posNova = posAnt +41
-	
-MoveAlien_RecalculaPos:
-	push R0
-	push R1
-	push R2
-	push R3
-
-	load R0, posAlien
-
-; sorteia nr. randomico entre 0 - 7
-	loadn R2, #Rand 	; declara ponteiro para tabela rand na memoria!
-	load R1, IncRand	; Pega Incremento da tabela Rand
-	add r2, r2, r1		; Soma Incremento ao inicio da tabela Rand
-						; R2 = Rand + IncRand
-	loadi R3, R2 		; busca nr. randomico da memoria em R3
-						; R3 = Rand(IncRand)				
-	inc r1				; Incremento ++
-	loadn r2, #30
-	cmp r1, r2			; Compara com o Final da Tabela e re-estarta em 0
-	jne MoveAlien_RecalculaPos_Skip
-		loadn r1, #0		; re-estarta a Tabela Rand em 0
-  MoveAlien_RecalculaPos_Skip:
-	store IncRand, r1	; Salva incremento ++
-
-; Switch Rand (r3)
- ; Case 0 : posAlien = posAlien -41
-	loadn r2, #0
-	cmp r3, r2	; Se Rand = 0
-	jne MoveAlien_RecalculaPos_Case1
-	loadn r1, #41
-	sub r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 1 : posAlien = posAlien -40
-   MoveAlien_RecalculaPos_Case1:
-	loadn r2, #1
-	cmp r3, r2	; Se Rand = 1
-	jne MoveAlien_RecalculaPos_Case2
-	loadn r1, #40
-	sub r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 2 : posAlien = posAlien - 39
-   MoveAlien_RecalculaPos_Case2:
-	loadn r2, #2	; Se Rand = 2
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_Case3
-	loadn r1, #39
-	sub r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 3 : posAlien = posAlien - 1
-   MoveAlien_RecalculaPos_Case3:
-	loadn r2, #3	; Se Rand = 3
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_Case4
-	loadn r1, #1
-	sub r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 4 : posAlien = posAlien + 1	
-   MoveAlien_RecalculaPos_Case4:
-	loadn r2, #4	; Se Rand = 4
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_Case5
-	loadn r1, #1
-	add r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 5 : posAlien = posAlien + 39
-   MoveAlien_RecalculaPos_Case5:
-	loadn r2, #5	; Se Rand = 5
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_Case6
-	loadn r1, #39
-	add r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch
-
- ; Case 6 : posAlien = posAlien + 40
-   MoveAlien_RecalculaPos_Case6:
-	loadn r2, #6	; Se Rand = 6
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_Case7
-	loadn r1, #40
-	add r0, r0, r1
-	jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch	
-
- ; Case 7 : posAlien = posAlien + 41
-   MoveAlien_RecalculaPos_Case7:
-	loadn r2, #7	; Se Rand = 7
-	cmp r3, r2
-	jne MoveAlien_RecalculaPos_FimSwitch
-	loadn r1, #41
-	add r0, r0, r1
-	;jmp MoveAlien_RecalculaPos_FimSwitch	; Break do Switch	
-
- ; Fim Switch:
-  MoveAlien_RecalculaPos_FimSwitch:	
-	store posAlien, R0	; Grava a posicao alterada na memoria
-	pop R3
-	pop R2
-	pop R1
-	pop R0
-	rts
-
-
-;----------------------------------
-MoveAlien_Desenha:
-	push R0
-	push R1
-	
-	Loadn R1, #'Q'	; Alien é atecla Q
-	load R0, posAlien
-	outchar R1, R0
-	store posAntAlien, R0
-	
-	pop R1
-	pop R0
-	rts
 
 ;----------------------------------
 ;----------------------------------
@@ -1042,10 +1203,10 @@ MoveTiro_RecalculaPos:
 	cmp R1, R2			; If FlagTiro == 1  Movimenta o Tiro
 	jne MoveTiro_RecalculaPos_Fim2	; Se nao vai embora!
 	
-	load R0, posTiro	; TEsta se o Tiro Pegou no Alien
-	load R1, posAlien
-	cmp R0, R1			; IF posTiro == posAlien  BOOM!!
-	jeq MoveTiro_RecalculaPos_Boom
+	;load R0, posTiro	; TEsta se o Tiro Pegou no Alien
+	;load R1, posAlien
+	;cmp R0, R1			; IF posTiro == posAlien  BOOM!!
+	;jeq MoveTiro_RecalculaPos_Boom
 	
 	loadn R1, #40		; Testa condicoes de Contorno 
 	loadn R2, #39
@@ -1494,35 +1655,33 @@ tela3Linha28 : string "                                        "
 tela3Linha29 : string "                                        "
 
 
-
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
-tela4Linha2  : string "                                        "
-tela4Linha3  : string "                                        "
+tela4Linha2  : string "    PRESCIONE ENTER PARA INICIAR        "
+tela4Linha3  : string "    E RECUPERAR O BARCO DO SIMOES       "
 tela4Linha4  : string "                                        "
 tela4Linha5  : string "                                        "
 tela4Linha6  : string "                                        "
-tela4Linha7  : string "                                        "
-tela4Linha8  : string "                                        "
-tela4Linha9  : string "                                        "
-tela4Linha10 : string "                                        "
-tela4Linha11 : string "                                        "
-tela4Linha12 : string "                                        "
-tela4Linha13 : string "                                        "
-tela4Linha14 : string "                                        "
+tela4Linha7  : string "               BBBBBBBB                 "
+tela4Linha8  : string "              BBBBBBBBBB                "
+tela4Linha9  : string "           BBBBBBBBBBBBBBBB             "
+tela4Linha10 : string "          BBBBBBBBBBBBBBBBBB            "
+tela4Linha11 : string "          BBBB   SIMOES   BBB           "
+tela4Linha12 : string "          BBBBBBBBBBBBBBBBBB            "
+tela4Linha13 : string "           BBBBBBBBBBBBBBBB             "
+tela4Linha14 : string "              BBBBBBBBBB                "
 tela4Linha15 : string "                                        "
 tela4Linha16 : string "                                        "
 tela4Linha17 : string "                                        "
 tela4Linha18 : string "                                        "
-tela4Linha19 : string "                                        "
-tela4Linha20 : string "                                        "
-tela4Linha21 : string "                                        "
-tela4Linha22 : string "                                        "
-tela4Linha23 : string "                                        "
+tela4Linha19 : string "                  __                    "
+tela4Linha20 : string "                 /  \                   "
+tela4Linha21 : string "                /____\                  "
+tela4Linha22 : string "                \    /                  "
+tela4Linha23 : string "                 \__/                   "
 tela4Linha24 : string "                                        "
 tela4Linha25 : string "                                        "
 tela4Linha26 : string "                                        "
 tela4Linha27 : string "                                        "
 tela4Linha28 : string "                                        "
 tela4Linha29 : string "                                        "
-
