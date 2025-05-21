@@ -259,7 +259,7 @@ PosicaoInicialB1:
 
 CairB1:
     load r0, posB1
-    call ApagaTelaB1
+    call ApagaB1
 
     loadn r1, #40
     add r2, r0, r1         ; r2 = próxima linha
@@ -300,7 +300,7 @@ DesenhaB1:
     rts
 
 
-ApagaTelaB1: 
+ApagaB1: 
     push r0
     push r1
 
@@ -493,7 +493,7 @@ PosicaoInicialB2:
 
 CairB2:
     load r0, posB2
-    call ApagaTelaB2       ;se Desenha antes, posAntB2 = posB2, então apaga o desenha que ele fez, logo aparece nada na tela
+    call ApagaB2       ;se Desenha antes, posAntB2 = posB2, então apaga o desenha que ele fez, logo aparece nada na tela
 
     loadn r1, #40
     add r2, r0, r1         ;r2 = próxima linha
@@ -535,7 +535,7 @@ DesenhaB2:
     rts
 
 
-ApagaTelaB2: 
+ApagaB2: 
     push r0
     push r1
 
@@ -726,7 +726,7 @@ PosicaoInicialB3:
 
 CairB3:
     load r0, posB3
-    call ApagaTelaB3
+    call ApagaB3
 
     loadn r1, #40
     add r2, r0, r1         ; r2 = próxima linha
@@ -767,7 +767,7 @@ DesenhaB3:
     rts
 
 
-ApagaTelaB3: 
+ApagaB3: 
     push r0
     push r1
 
