@@ -1,9 +1,9 @@
 jmp main
 
-; Constantes
+;Mensagens
 Msn0: string "Pressione ENTER para jogar"
 
-; Variaveis
+;Variaveis
 posBarril: var #5
     static posBarril + #0, #0 ;inicializa no 0
     static posBarril + #1, #0 ;inicializa no 0
@@ -16,11 +16,17 @@ posAntBarril: var #5
     static posAntBarril + #1, #0 ;inicializa no 0
     static posAntBarril + #2, #0 ;inicializa no 0
     static posAntBarril + #3, #0 ;inicializa no 0
-    static posAntBarril + #3, #0 ;inicializa no 0
+    static posAntBarril + #4, #0 ;inicializa no 0
 
 parametroBarril: var #1 ;Para saber qual Barril está caindo
 
-IncRandBarril: var #1
+IncRandBarril: var #5
+    static IncRandBarril + #0, #0 ;inicializa no 0
+    static IncRandBarril + #1, #0 ;inicializa no 0
+    static IncRandBarril + #2, #0 ;inicializa no 0
+    static IncRandBarril + #3, #0 ;inicializa no 0
+    static IncRandBarril + #4, #0 ;inicializa no 0
+
 RandBarril: var #6
     static RandBarril + #0, #247
     static RandBarril + #1, #275
@@ -28,7 +34,14 @@ RandBarril: var #6
     static RandBarril + #3, #246
     static RandBarril + #4, #271
     static RandBarril + #5, #244
-; Configurações
+
+FlagColuna: var #6
+    static FlagColuna + #0, #0
+    static FlagColuna + #1, #0
+    static FlagColuna + #2, #0
+    static FlagColuna + #3, #0
+    static FlagColuna + #4, #0
+    static FlagColuna + #5, #0
 
 main:
     call Menu
@@ -103,7 +116,8 @@ Menu:
         loadn r5, #6
         mod r3, r2, r5
 
-        store IncRandBarril, r3   
+        loadn r0, #IncRandBarril
+        storei r0, r3   
 
     rts
 
@@ -111,23 +125,18 @@ Menu:
 ;             MoveBarril
 ;-------------------------------------------
 MoveBarril:
+    call PosicaoInicialBarril
+    call CairBarril
+
+    rts
+
+PosicaoInicialBarril:
     push r0
     push r1
     push r2
     push r3
     push r4
 
-    call PosicaoInicialBarril
-    call CairBarril
-
-    pop r4
-    pop r3
-    pop r2
-    pop r1
-    pop r0
-    rts
-
-PosicaoInicialBarril:
     load r0, parametroBarril
     loadn r4, #0
     cmp r0, r4
@@ -146,17 +155,23 @@ PosicaoInicialBarril:
 
     VaiCair:
         ;r2 == 0 => posBarril 
-        ;call AcharIncRand 
-        load r1, IncRandBarril     ;r1 = índice atual (0 a 5)
-        loadn r3, #RandBarril      ;r3 = endereço base da tabela
-        add r3, r3, r1             ;r3 = endereço de RandBarril[r1]
-        loadi r2, r3               ;r2 = RandBarril[r1] (posição aleatória)
+
+        call AcharIncRandBarril 
+        
+        load r0, parametroBarril
+        loadn r3, #IncRandBarril
+        add r3, r3, r0
+        loadi r1, r3
+        
+        loadn r4, #RandBarril      ;r4 = endereço base da tabela
+        add r4, r4, r1             ;r4 = endereço de RandBarril[r1]
+        loadi r2, r4               ;r2 = RandBarril[r1] (posição aleatória)
         
         loadn r4, #posBarril
         add r4, r4, r0             ;generalizei para achar qual barril que vai cair
-        storei r4, r2              ;guarda a posB1 no 
+        storei r4, r2              ;guarda a posBarril[r0] no endereço posBarril[r0] 
 
-        ;call LigarFlag
+        call LigarFlag
         
         inc r1
 
@@ -168,12 +183,23 @@ PosicaoInicialBarril:
         loadn r1, #0
 
         StoreIncBarril:
-            store IncRandBarril, r1 ;Ele armazena o novo índice
+            storei r3, r1 ;Ele armazena o novo índice no r3 -> endereço IncRandBarril[parêmetro]
 
         RtsPosicaoInicialBarril:
+            pop r4
+            pop r3
+            pop r2
+            pop r1
+            pop r0
             rts             
 
 CairBarril:
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+
     loadn r0, #0
     loadn r3, #posBarril
     load r4, parametroBarril
@@ -207,9 +233,115 @@ CairBarril:
         loadn r0, #0
         storei r3, r0
 
+        call ZerarFlag
+
     RtsCairBarril:
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        pop r0
         rts
 
+AcharIncRandBarril:
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+
+    load r1, parametroBarril ;para saber qual barril vai cair
+    loadn r0, #IncRandBarril ;Endereço do Vetor dos Incrementos
+    add r0, r0, r1 ;r0 == Endereço IncRandBarril[r1]
+    loadi r2, r0 ; Valor do IncRandBarril[r1]
+
+    LoopFlags: ;Até achar a flag livre
+        loadn r1, #FlagColuna
+        add r1, r1, r2 ;endereço da FlagColuna[r2]
+        loadi r3, r1 ;valor da flag (0 ou 1)
+
+        loadn r4, #0
+        cmp r3, r4
+        jeq RtsAcharIncRandBarril ;se a flag está desligada, rts
+
+        inc r2 ;incremento o índice do barril
+
+        ;vê se precisa zerar o índice
+        loadn r1, #6
+        cmp r1, r2
+        jne LoopFlags
+
+        ;zera o índice
+        loadn r2, #0
+        jmp LoopFlags
+
+    RtsAcharIncRandBarril:
+        storei r0, r2 ;r0 tem o endereço do IncRandBarril[parametroBarril]
+
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+        rts
+
+LigarFlag:
+    push r0
+    push r1
+    push r2
+
+    loadn r0, #IncRandBarril
+    load r1, parametroBarril
+    add r0, r0, r1
+    loadi r2, r0 ;valor do incremento do IncRandBarril[parametroBarril]
+
+    loadn r1, #FlagColuna
+    add r1, r1, r2 ;Endereço FlagColuna[r2]
+
+    loadn r0, #1
+    storei r1, r0 ;Flag Ligada!
+
+    pop r2
+    pop r1
+    pop r0
+    rts
+
+ZerarFlag:
+    push r0
+    push r1
+    push r2
+    push r3
+    
+    loadn r0, #IncRandBarril
+    load r1, parametroBarril
+    add r0, r0, r1
+    loadi r2, r0 ;valor do incremento do IncRandBarril[parametroBarril]
+
+    ;como IncRandBarril sempre aponta já para a próxima coluna
+    ;confere primeiro, se é zero, caso não seja: r2--
+    loadn r3, #0
+    cmp r2, r3
+    jne SubIncRandBarril
+
+    loadn r2 #5 ;como os índices são ciclicos, antes de 0 é 5
+
+    jmp DesligaFlag
+
+    SubIncRandBarril:
+        dec r2
+
+    DesligaFlag:
+        loadn r1, #FlagColuna
+        add r1, r1, r2 ;Endereço FlagColuna[r2]
+
+        loadn r0, #0
+        storei r1, r0 ;Flag Ligada!
+
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+        rts
 ;-------------------------------------------
 ;           Desenha e Apaga B1
 ;-------------------------------------------
