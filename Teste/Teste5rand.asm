@@ -18,6 +18,13 @@ posAntBarril: var #5
     static posAntBarril + #3, #0 ;inicializa no 0
     static posAntBarril + #4, #0 ;inicializa no 0
 
+FlagCaindo: var #5
+    static FlagCaindo + #0, #0 ;inicializa no 0
+    static FlagCaindo + #1, #0 ;inicializa no 0
+    static FlagCaindo + #2, #0 ;inicializa no 0
+    static FlagCaindo + #3, #0 ;inicializa no 0
+    static FlagCaindo + #4, #0 ;inicializa no 0
+
 parametroBarril: var #1 ;Para saber qual Barril está caindo
 
 IncRandBarril: var #5
@@ -35,7 +42,7 @@ RandBarril: var #6
     static RandBarril + #4, #271
     static RandBarril + #5, #244
 
-FlagColuna: var #6
+FlagColuna: var #6 ;inicializa no zero == flag desligada
     static FlagColuna + #0, #0
     static FlagColuna + #1, #0
     static FlagColuna + #2, #0
@@ -50,7 +57,6 @@ main:
     loadn r0, #0
 
     Loopmain:
-
         loadn r7, #0 ;r7 vai ser meio que um parâmetro
         store parametroBarril, r7
         loadn r1, #2 ;Começa quando for um múltiplo de 5
@@ -125,6 +131,7 @@ Menu:
 ;             MoveBarril
 ;-------------------------------------------
 MoveBarril:
+
     call PosicaoInicialBarril
     call CairBarril
 
@@ -140,18 +147,16 @@ PosicaoInicialBarril:
     load r0, parametroBarril
     loadn r4, #0
     cmp r0, r4
-    jeq FlagCaindo
 
-    FlagCaindo:
-        loadn r3, #posBarril       ;r3 = endereço base da tabela
-        add r3, r3, r0             ;r3 = endereço de RandBarril[r0]
-        loadi r2, r3               ;r2 = posBarril[r0] 
+    loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
+    add r3, r3, r0             ;r3 = endereço da FlagCaindo[parametroBarril]
+    loadi r2, r3               ;r2 = valor da FlagCaindo[parametroBarril] 
         
-        loadn r4, #0
-        cmp r2, r4                 ;Cmp se posBarril == 0, se sim, ele tem que cair
-        jeq VaiCair
+    loadn r4, #0
+    cmp r2, r4                 ;Cmp se posBarril == 0, se sim, ele tem que cair
+    jeq VaiCair
 
-        jmp RtsPosicaoInicialBarril
+    jmp RtsPosicaoInicialBarril
 
     VaiCair:
         ;r2 == 0 => posBarril 
@@ -161,18 +166,23 @@ PosicaoInicialBarril:
         load r0, parametroBarril
         loadn r3, #IncRandBarril
         add r3, r3, r0
-        loadi r1, r3
+        loadi r1, r3               ;r1 = IncRandBarril[parametroBarril]
         
         loadn r4, #RandBarril      ;r4 = endereço base da tabela
         add r4, r4, r1             ;r4 = endereço de RandBarril[r1]
         loadi r2, r4               ;r2 = RandBarril[r1] (posição aleatória)
         
         loadn r4, #posBarril
-        add r4, r4, r0             ;generalizei para achar qual barril que vai cair
-        storei r4, r2              ;guarda a posBarril[r0] no endereço posBarril[r0] 
+        add r4, r4, r0             ;endereço do posBarril[parametroBarril]
+        storei r4, r2              ;guarda o valor no posBarril[parametroBarril] 
 
         call LigarFlag
-        
+
+        loadn r4, #FlagCaindo
+        add r4, r4, r0             ;endereço da FlagCaindo[parametroBarril]
+        loadn r0, #1
+        storei r4, r0              ;FlagCaindo[parametroBarril] == 1
+
         inc r1
 
         loadn r0, #6
@@ -231,7 +241,10 @@ CairBarril:
 
     Nochao:
         loadn r0, #0
-        storei r3, r0
+        load r1, parametroBarril
+        loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
+        add r3, r3, r1             ;r3 = endereço da FlagCaindo[parametroBarril]
+        storei r3, r0              ;zera a FlagCaindo[parametroBarril]
 
         call ZerarFlag
 
@@ -250,10 +263,10 @@ AcharIncRandBarril:
     push r3
     push r4
 
-    load r1, parametroBarril ;para saber qual barril vai cair
-    loadn r0, #IncRandBarril ;Endereço do Vetor dos Incrementos
-    add r0, r0, r1 ;r0 == Endereço IncRandBarril[r1]
-    loadi r2, r0 ; Valor do IncRandBarril[r1]
+    load r1, parametroBarril        ;para saber qual barril vai cair
+    loadn r0, #IncRandBarril        ;Endereço do Vetor dos Incrementos
+    add r0, r0, r1                  ;r0 == Endereço IncRandBarril[parametroBarril]
+    loadi r2, r0                    ;r2 == valor do IncRandBarril[parametroBarril]
 
     LoopFlags: ;Até achar a flag livre
         loadn r1, #FlagColuna
@@ -335,7 +348,7 @@ ZerarFlag:
         add r1, r1, r2 ;Endereço FlagColuna[r2]
 
         loadn r0, #0
-        storei r1, r0 ;Flag Ligada!
+        storei r1, r0 ;Flag Desligada!
 
         pop r3
         pop r2
@@ -343,7 +356,7 @@ ZerarFlag:
         pop r0
         rts
 ;-------------------------------------------
-;           Desenha e Apaga B1
+;          Desenha e Apaga Barril
 ;-------------------------------------------
 DesenhaBarril:
     push r0
@@ -384,7 +397,7 @@ ApagaBarril:
     rts
 
 ;--------------------------------------------
-;    Delay de aproximadamente 1 segundo
+;                 Delay 
 ;--------------------------------------------
 Delay:
     push r0
