@@ -50,7 +50,6 @@ FlagColuna: var #6 ;inicializa no zero == flag desligada
 
 Msn0: string "V O C E   V E N C E U !!!"
 Msn1: string "Quer jogar novamente? <s/n>"
-Msn2: string "Press ENTER to start"
 
 Letra: var #1			; Contem a letra que foi digitada
 
@@ -60,7 +59,7 @@ main:
 
 	loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	loadn R2, #1536  			; cor branca!
-	call ImprimeTela2
+	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
 	Loopmenu:
@@ -581,6 +580,7 @@ ImprimeStr2:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o p
 		add r4, r2, r4	; Soma a Cor
 		outchar r4, r0	; Imprime o caractere na tela
    		storei r6, r4
+        
    ImprimeStr2_Skip:
 		inc r0			; Incrementa a posicao na tela
 		inc r1			; Incrementa o ponteiro da String
