@@ -56,73 +56,7 @@ Letra: var #1			; Contem a letra que foi digitada
 
 ;Codigo principal
 main:
-	call Menu 
-
-	call ApagaTela
-	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #1536  			; cor branca!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-    
-	loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #2048  ;COR DA Onda
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-    
-	loadn R1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #2048; COR DA ESCADA
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-	
-	loadn R0, #0	
-	loadn R2, #0	
-
-	Loop:
-        loadn r7, #0 ;r7 vai ser meio que um parâmetro
-        store parametroBarril, r7
-        loadn r1, #2 ;Começa quando for um múltiplo de 5
-        mod r1, r0, r1
-        cmp r1, r2 
-        ceq MoveBarril
-
-        loadn r7, #1 ;r7 vai ser meio que um parâmetro
-        store parametroBarril, r7
-        loadn r1, #3 ;Começa quando for um múltiplo de 5
-        mod r1, r0, r1
-        cmp r1, r2 
-        ceq MoveBarril
-        
-        loadn r7, #2 ;r7 vai ser meio que um parâmetro
-        store parametroBarril, r7
-        loadn r1, #4 ;Começa quando for um múltiplo de 5
-        mod r1, r0, r1
-        cmp r1, r2 
-        ceq MoveBarril
-        
-        loadn r7, #3 ;r7 vai ser meio que um parâmetro
-        store parametroBarril, r7
-        loadn r1, #5 ;Começa quando for um múltiplo de 5
-        mod r1, r0, r1
-        cmp r1, r2 
-        ceq MoveBarril
-
-        loadn r7, #4 ;r7 vai ser meio que um parâmetro
-        store parametroBarril, r7
-        loadn r1, #6 ;Começa quando for um múltiplo de 5
-        mod r1, r0, r1
-        cmp r1, r2 
-        ceq MoveBarril
-
-		call Delay
-
-		inc r0 	;contador++
-		
-		jmp Loop
-	
-fim:
-    halt
-
-;-------------------------------------------
-;                  MENU
-;-------------------------------------------
-Menu:
+	Menu:
 
 	loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	loadn R2, #1536  			; cor branca!
@@ -143,10 +77,68 @@ Menu:
 
 		loadn r0, #IncRandBarril
 		storei r0, r3
-		
-		call ApagaTela
-		
-		rts
+
+    Reestart:
+        call ApagaTela
+        loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
+        loadn R2, #1536  			; cor branca!
+        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+        
+        loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
+        loadn R2, #2048  ;COR DA Onda
+        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+        
+        loadn R1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
+        loadn R2, #2048; COR DA ESCADA
+        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+        
+        loadn R0, #0	
+        loadn R2, #0	
+
+        Loop:
+            loadn r7, #0 ;r7 vai ser meio que um parâmetro
+            store parametroBarril, r7
+            loadn r1, #2 ;Começa quando for um múltiplo de 5
+            mod r1, r0, r1
+            cmp r1, r2 
+            ceq MoveBarril
+
+            loadn r7, #1 ;r7 vai ser meio que um parâmetro
+            store parametroBarril, r7
+            loadn r1, #3 ;Começa quando for um múltiplo de 5
+            mod r1, r0, r1
+            cmp r1, r2 
+            ceq MoveBarril
+            
+            loadn r7, #2 ;r7 vai ser meio que um parâmetro
+            store parametroBarril, r7
+            loadn r1, #4 ;Começa quando for um múltiplo de 5
+            mod r1, r0, r1
+            cmp r1, r2 
+            ceq MoveBarril
+            
+            loadn r7, #3 ;r7 vai ser meio que um parâmetro
+            store parametroBarril, r7
+            loadn r1, #5 ;Começa quando for um múltiplo de 5
+            mod r1, r0, r1
+            cmp r1, r2 
+            ceq MoveBarril
+
+            loadn r7, #4 ;r7 vai ser meio que um parâmetro
+            store parametroBarril, r7
+            loadn r1, #6 ;Começa quando for um múltiplo de 5
+            mod r1, r0, r1
+            cmp r1, r2 
+            ceq MoveBarril
+
+            call Delay
+
+            inc r0 	;contador++
+            
+            jmp Loop
+	
+fim:
+    halt
 
 ;-------------------------------------------
 ;                 MoveBarril
@@ -166,9 +158,6 @@ PosicaoInicialBarril:
     push r4
 
     load r0, parametroBarril
-    loadn r4, #0
-    cmp r0, r4
-
     loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
     add r3, r3, r0             ;r3 = endereço da FlagCaindo[parametroBarril]
     loadi r2, r3               ;r2 = valor da FlagCaindo[parametroBarril] 
