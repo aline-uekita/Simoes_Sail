@@ -400,23 +400,17 @@ ApagaBarril:
     add r0, r1, r0
     loadi r2, r0           ; r2 = pos anterior do barril (posição da tela 0~1199)
 
-    ; Calcula linha = r2 / 40
-    loadn r3, #40
-    div r4, r2, r3         ; r4 = linha (0 ~ 29)
+	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
+	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	add r0, R1, r2	; R2 = Tela1Linha0 + posAnt
+	loadn R4, #40
+	div R3, r2, R4	; R3 = posAnt/40
+	add r0, r0, R3	; R2 = Tela1Linha0 + posAnt + posAnt/40
+	
+	loadi R5, r0	; R5 = Char (Tela(posAnt))
 
-    ; Calcula coluna = r2 % 40
-    mod r5, r2, r3         ; r5 = coluna (0 ~ 39)
 
-    ; Endereço do caractere do cenário:
-    ; tela0Linha0 + r4 * 41 + r5
-    loadn r0, #tela0Linha0
-    loadn r3, #41
-    mul r4, r4, r3         ; r4 = deslocamento da linha
-    add r0, r0, r4         ; r0 += linha * 41
-    add r0, r0, r5         ; r0 += coluna
-    loadi r3, r0           ; r3 = caractere do cenário original
-
-    outchar r3, r2         ; Escreve esse caractere na posição da tela
+    outchar r5, r2         ; Escreve esse caractere na posição da tela
 
     pop r5
     pop r4
@@ -783,7 +777,7 @@ tela3Linha29 : string "                                        "
 
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
-tela4Linha2  : string "    PRESCIONE ENTER PARA INICIAR        "
+tela4Linha2  : string "    PRESSIONE ENTER PARA INICIAR        "
 tela4Linha3  : string "    E RECUPERAR O BARCO DO SIMOES       "
 tela4Linha4  : string "                                        "
 tela4Linha5  : string "                                        "
