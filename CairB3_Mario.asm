@@ -379,6 +379,10 @@ DesenhaBarril:
 
     loadn r3, #'O'
     outchar r3, r2
+
+    loadn r0, #posAntBarril
+    add r0, r0, r1
+    storei r0, r2
     
     pop r3
     pop r2
@@ -399,7 +403,7 @@ ApagaBarril:
     add r0, r1, r0
     loadi r2, r0           ; r2 = pos anterior do barril (posição da tela 0~1199)
 
-	; --> R2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
+	; --> R0 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
 	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	add r0, R1, r2	; R2 = Tela1Linha0 + posAnt
 	loadn R4, #40
