@@ -184,8 +184,6 @@ PosicaoInicialBarril:
         add r4, r4, r0             ;generalizei para achar qual barril que vai cair
         storei r4, r2              ;guarda a posBarril[r0] no endereço posBarril[r0] 
 
-        call LigarFlag
-
         loadn r4, #FlagCaindo
         add r4, r4, r0             ;endereço da FlagCaindo[parametroBarril]
         loadn r0, #1
@@ -298,6 +296,8 @@ AcharIncRandBarril:
 
     RtsAcharIncRandBarril:
         storei r0, r2 ;r0 tem o endereço do IncRandBarril[parametroBarril]
+
+        call LigarFlag
 
         pop r4
         pop r3
