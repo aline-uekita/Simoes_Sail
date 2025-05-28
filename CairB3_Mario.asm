@@ -224,20 +224,6 @@ MoveMario_RecalculaPos:
 
         dec r0 ;vai para a esquerda
 
-        ; Verifica colisão
-        loadn r2, #40
-        div r1, r0, r2 ; linha do posMario
-        mod r4, r0, r2 ; coluna do posMario
-
-        loadn r3, #tela3Linha0
-        add r3, r3, r1
-        add r3, r3, r4
-        loadi r6, r3
-
-        loadn r5, #'#' ;parede
-        cmp r6, r5
-        jeq RtsMoveMario_RecalculaPos
-
         jmp StoreposMario
 
     ;Move para direita
@@ -249,21 +235,7 @@ MoveMario_RecalculaPos:
         jeq RtsMoveMario_RecalculaPos
 
         inc r0 ;vai para a direita
-
-        ; Verifica colisão
-        loadn r2, #40
-        div r1, r0, r2 ; linha do posMario
-        mod r4, r0, r2 ; coluna do posMario
-
-        loadn r3, #tela3Linha0 ;poderia ser o tela0linha0
-        add r3, r3, r1
-        add r3, r3, r4
-        loadi r6, r3
-
-        loadn r5, #'#' ;parede
-        cmp r6, r5
-        jeq RtsMoveMario_RecalculaPos
-
+        
         jmp StoreposMario
 
     ;Move para cima
