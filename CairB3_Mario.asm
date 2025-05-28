@@ -216,37 +216,77 @@ MoveMario_RecalculaPos:
 
     ;Move para a esquerda
     MoveMario_RecalculaPos_A:
+        ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
-        mod r1, r0, r1
+        mod r1, r0, r1      ;coluna atual
         cmp r1, r2
-        jeq RtsMoveMario_RecalculaPos
+        jeq RtsMoveMario_RecalculaPos  
 
-        dec r0 ;vai para a esquerda
+        ;Verifica se tem chão
+        mov r6, r0
+        loadn r2, #40
+        dec r6              ;vai para a esquerda
+        add r6, r6, r2      ;vai para linha de baixo
+        div r1, r6, r2      ;linha
+        mod r4, r6, r2      ;coluna
 
+        ; calcula endereço: tela1 + linha*41 + coluna
+        loadn r3, #41
+        mul r1, r1, r3      ; deslocamento da linha (linha * 41)
+        loadn r3, #tela1Linha0
+        add r3, r3, r1      ; endereço da linha
+        add r3, r3, r4      ; endereço final do caractere
+        loadi r6, r3        ;lê caractere do chão
+
+        loadn r5, #'='
+        cmp r6, r5
+        jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
+
+        dec r0              ; anda para a esquerda
         jmp StoreposMario
 
     ;Move para direita
     MoveMario_RecalculaPos_D:
+        ;Verifica se está na parede
         loadn r1, #40
-        loadn r2, #39
-        mod r1, r0, r1
+        loadn r2, #0
+        mod r1, r0, r1      ;coluna atual
         cmp r1, r2
-        jeq RtsMoveMario_RecalculaPos
+        jeq RtsMoveMario_RecalculaPos  
 
-        inc r0 ;vai para a direita
-        
+        ;Verifica se tem chão
+        mov r6, r0
+        loadn r2, #40
+        inc r6              ;vai para a direita
+        add r6, r6, r2      ;vai para linha de baixo
+        div r1, r6, r2      ;linha
+        mod r4, r6, r2      ;coluna
+
+        ; calcula endereço: tela1 + linha*41 + coluna
+        loadn r3, #41
+        mul r1, r1, r3      ; deslocamento da linha (linha * 41)
+        loadn r3, #tela1Linha0
+        add r3, r3, r1      ; endereço da linha
+        add r3, r3, r4      ; endereço final do caractere
+        loadi r6, r3        ;lê caractere do chão
+
+        loadn r5, #'='
+        cmp r6, r5
+        jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
+
+        inc r0              ; anda para a direita
         jmp StoreposMario
+
 
     ;Move para cima
     MoveMario_RecalculaPos_W:
         loadn r2, #40
-        load r3, posMario
 
         ; calcula o endereço do caractere no mapa da escada
         loadn r1, #tela3Linha0
-        add r4, r3, r1    ; tela3Linha0 + pos
-        div r5, r3, r2    ; pos / 40 (quantidade de \0 anteriores)
+        add r4, r0, r1    ; tela3Linha0 + pos
+        div r5, r0, r2    ; pos / 40 (quantidade de \0 anteriores)
         add r4, r4, r5    ; soma ajuste da linha
 
         loadi r6, r4      ; pega o caractere do mapa da escada
@@ -257,6 +297,7 @@ MoveMario_RecalculaPos:
 
         sub r0, r0, r2 ; sobe 1 linha
         jmp StoreposMario
+        
 ;--------------------------------------------
 ;            Desenha e Apaga Mario 
 ;--------------------------------------------
