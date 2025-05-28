@@ -46,6 +46,9 @@ FlagColuna: var #6 ;inicializa no zero == flag desligada
     static FlagColuna + #4, #0
     static FlagColuna + #5, #0
 
+posMario: var #1
+posAntMario: var #1
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Msn0: string "V O C E   V E N C E U !!!"
@@ -62,6 +65,7 @@ main:
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
+
 	Loopmenu:
 		inchar r4
 		loadn r1, #13 ;tecla enter
@@ -87,14 +91,16 @@ main:
         loadn R2, #2048  ;COR DA Onda
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
-        loadn R1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #2048; COR DA ESCADA
-        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-        
+        loadn r0, #1119
+        store posMario, r0 ;mario começa na linha 27, coluna 39
+        call DesenhaMario
+
         loadn R0, #0	
         loadn R2, #0	
 
         Loop:
+            call MoveMario
+
             loadn r7, #0 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
             loadn r1, #2 ;Começa quando for um múltiplo de 5
@@ -138,6 +144,192 @@ main:
 	
 fim:
     halt
+
+;--------------------------------------------
+;               MoveMario
+;--------------------------------------------	
+MoveMario:
+    push r0
+    push r1
+    push r2
+
+	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
+
+    ;Só apaga e Redesenha se (pos != posAnt)
+	load r0, posMario
+	load r1, posAntMario
+	cmp r0, r1
+	jeq RtsMoveMario
+	
+	;Se Próxima instrucao do mario for o chao ou parede, nao move
+	call ApagaMario
+	call DesenhaMario	
+
+    RtsMoveMario:
+	
+        pop r2
+        pop r1
+        pop r0
+        rts
+
+MoveMario_RecalculaPos:
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+    push r5
+    push r6
+
+    load r0, posMario
+    store posAntMario, r0
+    loadn r2, #160 ;linha 3 coluna 30
+    ;cmp r1, r2
+    ;jle MoveMario_venceu ; (comentado por estar inativo)
+
+    inchar r1 ; lê o teclado
+
+    loadn r2, #'a'
+    cmp r1, r2
+    jeq MoveMario_RecalculaPos_A
+
+    loadn r2, #'d'
+    cmp r1, r2
+    jeq MoveMario_RecalculaPos_D
+
+    loadn r2, #'w'
+    cmp r1, r2
+    jeq MoveMario_RecalculaPos_W
+
+    StoreposMario:
+        store posMario, r0
+
+    RtsMoveMario_RecalculaPos:
+        pop r6
+        pop r5
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+        rts
+
+    ;Move para a esquerda
+    MoveMario_RecalculaPos_A:
+        loadn r1, #40
+        loadn r2, #0
+        mod r1, r0, r1
+        cmp r1, r2
+        jeq RtsMoveMario_RecalculaPos
+
+        dec r0 ;vai para a esquerda
+
+        ; Verifica colisão
+        loadn r2, #40
+        div r1, r0, r2 ; linha do posMario
+        mod r4, r0, r2 ; coluna do posMario
+
+        loadn r3, #tela3Linha0
+        add r3, r3, r1
+        add r3, r3, r4
+        loadi r6, r3
+
+        loadn r5, #'#' ;parede
+        cmp r6, r5
+        jeq RtsMoveMario_RecalculaPos
+
+        jmp StoreposMario
+
+    ;Move para direita
+    MoveMario_RecalculaPos_D:
+        loadn r1, #40
+        loadn r2, #39
+        mod r1, r0, r1
+        cmp r1, r2
+        jeq RtsMoveMario_RecalculaPos
+
+        inc r0 ;vai para a direita
+
+        ; Verifica colisão
+        loadn r2, #40
+        div r1, r0, r2 ; linha do posMario
+        mod r4, r0, r2 ; coluna do posMario
+
+        loadn r3, #tela3Linha0 ;poderia ser o tela0linha0
+        add r3, r3, r1
+        add r3, r3, r4
+        loadi r6, r3
+
+        loadn r5, #'#' ;parede
+        cmp r6, r5
+        jeq RtsMoveMario_RecalculaPos
+
+        jmp StoreposMario
+
+    ;Move para cima
+    MoveMario_RecalculaPos_W:
+        loadn r2, #40
+        load r3, posMario
+
+        ; calcula o endereço do caractere no mapa da escada
+        loadn r1, #tela3Linha0
+        add r4, r3, r1    ; tela3Linha0 + pos
+        div r5, r3, r2    ; pos / 40 (quantidade de \0 anteriores)
+        add r4, r4, r5    ; soma ajuste da linha
+
+        loadi r6, r4      ; pega o caractere do mapa da escada
+
+        loadn r5, #'n'
+        cmp r6, r5
+        jne RtsMoveMario_RecalculaPos
+
+        sub r0, r0, r2 ; sobe 1 linha
+        jmp StoreposMario
+;--------------------------------------------
+;            Desenha e Apaga Mario 
+;--------------------------------------------
+DesenhaMario:
+    push r0
+    push r1
+
+    load r0, posMario
+    loadn r1, ':'
+    outchar r1, r0
+
+    store posAntMario, R0
+
+    pop r1
+    pop r0
+    rts
+
+ApagaMario:
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+    push r5
+
+    load r0, posAntMario
+
+	; --> r2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
+	loadn r1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	add r2, r1, r0	; R2 = Tela1Linha0 + posAnt
+	loadn r4, #40
+	div r3, r0, r4	; R3 = posAnt/40
+	add r2, r2, r3	; R2 = Tela1Linha0 + posAnt + posAnt/40
+	
+	loadi r5, r2	; R5 = Char (Tela(posAnt))
+
+    outchar r5, r0         ; Escreve esse caractere na posição da tela
+
+    pop r5
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    pop r0
+    rts
 
 ;-------------------------------------------
 ;                 MoveBarril
@@ -432,7 +624,7 @@ Delay:
     loadn r1, #15
 
     DelayVolta2:
-        loadn r0, #500
+        loadn r0, #1000
 
     DelayVolta1:
         dec r0
@@ -479,9 +671,6 @@ ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
 	pop r0
 	rts
 				
-;---------------------
-
-;---------------------------	
 ;********************************************************
 ;                   IMPRIME STRING
 ;********************************************************
@@ -513,11 +702,6 @@ ImprimeStr:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o pr
 	pop r0
 	rts
 	
-;------------------------	
-	
-
-;-------------------------------
-
 
 ;********************************************************
 ;                       IMPRIME TELA2
@@ -752,30 +936,30 @@ tela3Linha0  : string "                                        "
 tela3Linha1  : string "                                        "
 tela3Linha2  : string "                                        "
 tela3Linha3  : string "                                        "
-tela3Linha4  : string "                                        "
-tela3Linha5  : string "                                        "
-tela3Linha6  : string "                                        "
-tela3Linha7  : string "                                        "
-tela3Linha8  : string "                                        "
-tela3Linha9  : string "                                        "
-tela3Linha10 : string "                                        "
-tela3Linha11 : string "                                        "
-tela3Linha12 : string "                                        "
-tela3Linha13 : string "                                        "
-tela3Linha14 : string "                                        "
-tela3Linha15 : string "                                        "
-tela3Linha16 : string "                                        "
-tela3Linha17 : string "                                        "
-tela3Linha18 : string "                                        "
-tela3Linha19 : string "                                        "
-tela3Linha20 : string "                                        "
-tela3Linha21 : string "                                        "
-tela3Linha22 : string "                                        "
-tela3Linha23 : string "                                        "
-tela3Linha24 : string "                                        "
-tela3Linha25 : string "                                        "
-tela3Linha26 : string "                                        "
-tela3Linha27 : string "                                        "
+tela3Linha4  : string "                   n                    "
+tela3Linha5  : string "                   n                    "
+tela3Linha6  : string "                   n                    "
+tela3Linha7  : string "       n                                "
+tela3Linha8  : string "       n                                "
+tela3Linha9  : string "       n                                "
+tela3Linha10 : string "       n                                "
+tela3Linha11 : string "                                   n    "
+tela3Linha12 : string "                                   n    "
+tela3Linha13 : string "                                   n    "
+tela3Linha14 : string "                                   n    "
+tela3Linha15 : string "                       n                "
+tela3Linha16 : string "                       n                "
+tela3Linha17 : string "                       n                "
+tela3Linha18 : string "      n                                 "
+tela3Linha19 : string "      n                                 "
+tela3Linha20 : string "      n                                 "
+tela3Linha21 : string "      n                                 "
+tela3Linha22 : string "                               n        "
+tela3Linha23 : string "                               n        "
+tela3Linha24 : string "                               n        "
+tela3Linha25 : string "    n                                   "
+tela3Linha26 : string "    n                                   "
+tela3Linha27 : string "    n                                   "
 tela3Linha28 : string "                                        "
 tela3Linha29 : string "                                        "
 
