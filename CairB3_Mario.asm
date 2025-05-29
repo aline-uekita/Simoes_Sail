@@ -38,8 +38,6 @@ FlagColuna: var #6 ;inicializa no zero == flag desligada
 posMario: var #1
 posAntMario: var #1
 
-Letra: var #1			; Contem a letra que foi digitada
-
 ;Codigo principal
 main:
 	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
@@ -523,6 +521,10 @@ CairBarril:
     
     storei r0, r2 ;posAntBarril[r1]
 
+    ;Vejo se colidiu com o mário
+    load r0, posAntMario
+    cmp r0, r2
+    ceq Morreu
     
     jmp RtsCairBarril
 
@@ -644,6 +646,55 @@ ZerarFlag:
         pop r1
         pop r0
         rts
+
+;--------------------------------------------
+;                 Morreu
+;--------------------------------------------
+Morreu:
+    push r0
+    push r1
+    push r2
+    push r3
+
+    call ApagaTela
+
+    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #1536  			; cor branca!
+	call ImprimeTela
+
+	loadn r2, #0 ;inicializa o contador com 0 
+
+    loadn r0, #'s'
+    loadn r3, #'n'
+
+    LoopMorreu:
+        inchar r1
+        inc r2
+        
+        cmp r1, r3
+        jeq fim
+
+        cmp r1, r0
+        jeq SimM
+
+        jmp LoopMorreu
+
+    SimM:
+		loadn r5, #5
+		mod r3, r2, r5
+
+		loadn r0, #IncRandBarril
+		storei r0, r3
+
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+
+        pop r0
+
+        jmp Restart
+
 ;-------------------------------------------
 ;          Desenha e Apaga Barril
 ;-------------------------------------------
@@ -878,26 +929,6 @@ ImprimeStr2:
 	pop r0
 	rts
 		
-;********************************************************
-;                   DIGITE UMA LETRA
-;********************************************************
-
-DigLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra"
-	push r0
-	push r1
-	loadn r1, #255	; Se nao digitar nada vem 255
-
-   DigLetra_Loop:
-		inchar r0			; Le o teclado, se nada for digitado = 255
-		cmp r0, r1			;compara r0 com 255
-		jeq DigLetra_Loop	; Fica lendo ate' que digite uma tecla valida
-
-	store Letra, r0			; Salva a tecla na variavel global "Letra"
-
-	pop r1
-	pop r0
-	rts
-
 ;--------------------------------------------
 ;                 Apaga Tela
 ;--------------------------------------------
