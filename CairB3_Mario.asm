@@ -55,7 +55,7 @@ main:
 		cmp r4, r1
 		jne Loopmenu
 
-		loadn r5, #5
+		loadn r5, #6
 		mod r3, r2, r5
 
 		loadn r0, #IncRandBarril
@@ -86,21 +86,21 @@ main:
 
             loadn r7, #0 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
-            loadn r1, #2 ;Começa quando for um múltiplo de 5
+            loadn r1, #2 ;Começa quando for um múltiplo de 2
             mod r1, r0, r1
             cmp r1, r2 
             ceq MoveBarril
 
             loadn r7, #1 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
-            loadn r1, #3 ;Começa quando for um múltiplo de 5
+            loadn r1, #3 ;Começa quando for um múltiplo de 3
             mod r1, r0, r1
             cmp r1, r2 
             ceq MoveBarril
             
             loadn r7, #2 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
-            loadn r1, #4 ;Começa quando for um múltiplo de 5
+            loadn r1, #4 ;Começa quando for um múltiplo de 4
             mod r1, r0, r1
             cmp r1, r2 
             ceq MoveBarril
@@ -114,7 +114,7 @@ main:
 
             loadn r7, #4 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
-            loadn r1, #6 ;Começa quando for um múltiplo de 5
+            loadn r1, #6 ;Começa quando for um múltiplo de 6
             mod r1, r0, r1
             cmp r1, r2 
             ceq MoveBarril
@@ -140,28 +140,28 @@ Inicializacao:
     push r2
     push r3
 
-    loadn r0, #FlagCaindo
-    loadn r2, #5
-    loadn r1, #0
+    loadn r0, #FlagCaindo ;sempre é endereço, não flag
+    loadn r2, #5 ;número de flags (como são de 0 - 4, se o r3 == 5, passou do número de flags existentes)
+    loadn r1, #0 ;vai ser o 0 que zera as flags
     store posAntMario, r1
-    loadn r3, #0
+    loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
     LoopFlagCaindo0:
-        storei r0, r1
+        storei r0, r1 ;endereço da flag recebe 0
 
-        inc r0
-        inc r3
+        inc r0 ;vai para o próximo endereço da flag
+        inc r3 ;vai para a próxima flag 
 
         cmp r3, r2
         jne LoopFlagCaindo0
         
-    loadn r3, #0
+    loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
     loadn r0, #FlagColuna
-    loadn r2, #6
+    loadn r2, #6 ;número de flags (como são de 0 - 5, se o r3 == 6, passou do número de flags existentes)
     LoopFlagColuna0:
-        storei r0, r1
+        storei r0, r1 ;endereço da flag recebe 0
 
-        inc r0
-        inc r3
+        inc r0 ;vai para o próximo endereço da flag
+        inc r3 ;vai para a próxima flag 
 
         cmp r3, r2
         jne LoopFlagColuna0
@@ -187,7 +187,7 @@ MoveMario:
 
 	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
 
-    ;Só apaga e Redesenha se (pos != posAnt)
+    ;Só apaga e Redesenha se (pos != posAnt) não precisava, mas deixa minimamente mais rápido
 	load r0, posMario
 	load r1, posAntMario
 	cmp r0, r1
@@ -215,7 +215,7 @@ MoveMario_RecalculaPos:
 
     load r0, posMario
 
-    inchar r1 ; lê o teclado
+    inchar r1 ;lê o teclado
 
     loadn r2, #'a'
     cmp r1, r2
@@ -251,31 +251,32 @@ MoveMario_RecalculaPos:
         ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
-        mod r1, r0, r1      ;coluna atual
-        cmp r1, r2
+        mod r1, r0, r1      ;coluna posMario atual
+        cmp r1, r2          ;Se ele já tiver na coluna 0, não tem mais o que andar
         jeq RtsMoveMario_RecalculaPos  
 
-        ;Verifica se tem chão
-        mov r6, r0
-        loadn r2, #40
-        dec r6              ;vai para a esquerda
-        add r6, r6, r2      ;vai para linha de baixo
-        div r1, r6, r2      ;linha
-        mod r4, r6, r2      ;coluna
+        ;Verifica se tem chão: 
+            mov r6, r0          ;r0 é fixo para mexer na posMario 
+            loadn r2, #40
+            dec r6              ;vai para a esquerda
+            add r6, r6, r2      ;vai para linha de baixo
+            div r1, r6, r2      ;linha posMario + 40
+            mod r4, r6, r2      ;coluna posMario + 40
 
-        ; calcula endereço: tela1 + linha*41 + coluna
-        loadn r3, #41
-        mul r1, r1, r3      ; deslocamento da linha (linha * 41)
-        loadn r3, #tela1Linha0
-        add r3, r3, r1      ; endereço da linha
-        add r3, r3, r4      ; endereço final do caractere
-        loadi r6, r3        ;lê caractere do chão
+            ;calcula endereço: tela1 + linha*41(40 + '\0') + coluna
+            loadn r3, #41
+            mul r1, r1, r3      ;deslocamento da linha (linha * 41)
+            
+            loadn r3, #tela1Linha0
+            add r3, r3, r1      ;endereço da linha
+            add r3, r3, r4      ;endereço final do caractere (soma coluna)
+            loadi r6, r3        ;vê o que tem lá
 
-        loadn r5, #'='
-        cmp r6, r5
-        jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
+            loadn r5, #'='
+            cmp r6, r5
+            jne RtsMoveMario_RecalculaPos  ;se não for chão, rts
 
-        dec r0              ; anda para a esquerda
+        dec r0              ;se tiver chão anda para esquerda
         jmp StoreposMario
 
     ;Move para direita
@@ -283,82 +284,83 @@ MoveMario_RecalculaPos:
         ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
-        mod r1, r0, r1      ;coluna atual
+        mod r1, r0, r1      ;coluna posMario atual
+        loadn r1, #39       ;se ele está na coluna 39, não tem mais o que andar
         cmp r1, r2
         jeq RtsMoveMario_RecalculaPos  
 
         ;Verifica se tem chão
-        mov r6, r0
-        loadn r2, #40
-        inc r6              ;vai para a direita
-        add r6, r6, r2      ;vai para linha de baixo
-        div r1, r6, r2      ;linha
-        mod r4, r6, r2      ;coluna
+            mov r6, r0          ;r0 == posMario, reservado
+            loadn r2, #40
+            inc r6              ;vai para a direita
+            add r6, r6, r2      ;vai para linha de baixo
+            div r1, r6, r2      ;linha posMario + 1 + 40
+            mod r4, r6, r2      ;coluna posMario + 1 + 40
 
-        ; calcula endereço: tela1 + linha*41 + coluna
-        loadn r3, #41
-        mul r1, r1, r3      ; deslocamento da linha (linha * 41)
-        loadn r3, #tela1Linha0
-        add r3, r3, r1      ; endereço da linha
-        add r3, r3, r4      ; endereço final do caractere
-        loadi r6, r3        ;lê caractere do chão
+            ;calcula endereço: tela1 + linha*41(40 + '\0') + coluna
+            loadn r3, #41
+            mul r1, r1, r3      ;deslocamento da linha (linha * 41)
+            loadn r3, #tela1Linha0
+            add r3, r3, r1      ;endereço da linha
+            add r3, r3, r4      ;endereço final do caractere
 
-        loadn r5, #'='
-        cmp r6, r5
-        jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
+            loadi r6, r3        ;vê o que tem no endereço
 
-        inc r0              ; anda para a direita
+            loadn r5, #'='
+            cmp r6, r5
+            jne RtsMoveMario_RecalculaPos  ;se não for chão, não anda
+
+        inc r0              ;anda para a direita
         jmp StoreposMario
 
 
     ;Move para cima
     MoveMario_RecalculaPos_W:
-        loadn r2, #40
+        ;calcula o endereço do caractere no mapa da escada
+            loadn r2, #40
+            loadn r1, #tela3Linha0
+            add r4, r0, r1    ;endereço da tela3Linha0 + posMario
+            div r5, r0, r2    ;pos / 40 (quantidade de '\0' anteriores)
+            add r4, r4, r5    ;endereço da tela3Linha0 + posMario + '\0'
+            loadi r6, r4      ;vê o que tem no mapa
 
-        ; calcula o endereço do caractere no mapa da escada
-        loadn r1, #tela3Linha0
-        add r4, r0, r1    ; tela3Linha0 + pos
-        div r5, r0, r2    ; pos / 40 (quantidade de \0 anteriores)
-        add r4, r4, r5    ; soma ajuste da linha
+            loadn r5, #'n'
+            cmp r6, r5
+            jne RtsMoveMario_RecalculaPos ;se não tiver o 'n' -> pode ser qualquer caractere, mas tem que atualizar a tela3
 
-        loadi r6, r4      ; pega o caractere do mapa da escada
-
-        loadn r5, #'n'
-        cmp r6, r5
-        jne RtsMoveMario_RecalculaPos
-
-        sub r0, r0, r2 ; sobe 1 linha
+        sub r0, r0, r2 ;sobe 1 linha
     
         jmp StoreposMario
 
     MoveMario_RecalculaPos_S:
-    ; Posição abaixo
-    loadn r2, #40
-    mov   r6, r0
-    add   r6, r6, r2     ; descer uma linha
+        loadn r2, #40
+        mov   r6, r0         ;r0 é fixo para a posMario
+        add   r6, r6, r2     ;desce uma linha
+        div   r1, r6, r2     ;linha posMario + 40 
+        mod   r4, r6, r2     ;coluna posMario + 40
 
-    ; Calcula linha e coluna da posição abaixo
-    div   r1, r6, r2     ; linha
-    mod   r4, r6, r2     ; coluna
+        ;Calcula o endereço da posição na tela3 (mapa de escadas)
+            loadn r3, #41         ;40 + \0
+            mul r1, r1, r3        ;deslocamento da linha (linha * 41)
+            
+            loadn r3, #tela3Linha0
+            add r3, r3, r1        ;endereço da tela3 + linha (linha * 41)
+            add r3, r3, r4        ;endereço da tela3 + linha (linha * 41) + coluna
 
-    ; Calcula o endereço da posição na tela3 (mapa de escadas)
-    loadn r3, #41         ; 40 + \0
-    mul   r1, r1, r3
-    loadn r3, #tela3Linha0
-    add   r3, r3, r1
-    add   r3, r3, r4
-    loadi r6, r3
+            loadi r6, r3            ;vê o que tem nesse endereço
 
-    ; Verifica se há escada
-    loadn r5, #'n'
-    cmp   r6, r5
-    jne   RtsMoveMario_RecalculaPos
+            loadn r5, #'n'
+            cmp   r6, r5
+            jne   RtsMoveMario_RecalculaPos ;se não for 'n', rts
 
-    ; Pode descer
+    ;Desce para a próxima linha
     add   r0, r0, r2
+    
+    ;como ele está nadando contra a correnteza, é mais lento
     call Delay
     call Delay
     call Delay
+
     jmp   StoreposMario
 
 ;--------------------------------------------
@@ -370,10 +372,10 @@ Venceu:
     push r2
     push r3
 
-    call ApagaTela
+    call ApagaTela          ;Apago o cenário do jogo
 
-    loadn r1, #tela5Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #30720 			; cor branca!
+    loadn r1, #tela5Linha0	;Imprimo a tela do vencedor
+	loadn r2, #30720 		;cor roxa
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -382,30 +384,31 @@ Venceu:
     loadn r3, #'n'
 
     LoopVenceu:
-        inchar r1
-        inc r2
+        inchar r1 ;lê o teclado
+        inc r2 ;contador++ 
         
-        cmp r1, r3
+        cmp r1, r3 ;compara se a pessoa digitou 'n'
         jeq fim
 
-        cmp r1, r0
+        cmp r1, r0  ;compara se a pessoa digitou 's'
         jeq Sim
 
-        jmp LoopVenceu
+        jmp LoopVenceu ;se ela não digitou nada ou digitou algo 'não permitido', volta para o loop
 
     Sim:
-		loadn r5, #5
-		mod r3, r2, r5
+        ;gera o randômico sempre para o barril 0 -> mais rápido
+		loadn r5, #6 ;tamanho da tabela de randômicos
+		mod r3, r2, r5 ;deixo o valor entre 0 e 5
 
-		loadn r0, #IncRandBarril
-		storei r0, r3
+		loadn r0, #IncRandBarril ;endereço do índice do barril[0]
+		storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
 
         pop r3
         pop r2
         pop r1
         pop r0
 
-        pop r0
+        pop r0 ;desempilha tudo, não vai ter o rts, vai direto no main
 
         jmp Restart
 
@@ -420,7 +423,7 @@ DesenhaMario:
     loadn r1, ':'
     outchar r1, r0
 
-    store posAntMario, R0
+    store posAntMario, R0 ;Se o mario anda, a posAntMario é atualizada quando é desenhado
 
     pop r1
     pop r0
@@ -436,16 +439,16 @@ ApagaMario:
 
     load r0, posAntMario
 
-	; --> r2 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
-	loadn r1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	add r2, r1, r0	; R2 = Tela1Linha0 + posAnt
-	loadn r4, #40
-	div r3, r0, r4	; R3 = posAnt/40
-	add r2, r2, r3	; R2 = Tela1Linha0 + posAnt + posAnt/40
-	
-	loadi r5, r2	; R5 = Char (Tela(posAnt))
+	loadn r1, #tela0Linha0	;Endereço do cenário tela1 + tela2
+	add r2, r1, r0	;r2 = endereço tela0Linha0 + posAntMario
 
-    outchar r5, r0         ; Escreve esse caractere na posição da tela
+	loadn r4, #40
+	div r3, r0, r4	;r3 = linha posAntMario
+	add r2, r2, r3	;r2 = endereço tela0Linha0 + posAntMario + posAnt/40
+	
+	loadi r5, r2	;vê o que tinha no cenário
+
+    outchar r5, r0         ;desenha o que tinha antes -> sem o Mario
 
     pop r5
     pop r4
@@ -472,7 +475,7 @@ PosicaoInicialBarril:
     push r3
     push r4
 
-    load r0, parametroBarril
+    load r0, parametroBarril   ;vê qual barril que está caindo [0 a 4]
     loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
     add r3, r3, r0             ;r3 = endereço da FlagCaindo[parametroBarril]
     loadi r2, r3               ;r2 = valor da FlagCaindo[parametroBarril] 
@@ -493,19 +496,19 @@ PosicaoInicialBarril:
         loadi r1, r3               ;r1 = IncRandBarril[parametroBarril]
         
         loadn r4, #RandBarril      ;r4 = endereço base da tabela
-        add r4, r4, r1             ;r4 = endereço de RandBarril[r1]
-        loadi r2, r4               ;r2 = RandBarril[r1] (posição aleatória)
+        add r4, r4, r1             ;r4 = endereço de RandBarril[IncRandBarril[parametroBarril]]
+        loadi r2, r4               ;r2 = RandBarril[IncRandBarril[parametroBarril]] (posição inicial)
         
         loadn r4, #posBarril
-        add r4, r4, r0             ;generalizei para achar qual barril que vai cair
-        storei r4, r2              ;guarda a posBarril[r0] no endereço posBarril[r0] 
+        add r4, r4, r0             ;r4 = endereço posBarril[parametroBarril]
+        storei r4, r2              ;guarda a posição inicial no endereço posBarril[parametroBarril] 
 
         loadn r4, #FlagCaindo
         add r4, r4, r0             ;endereço da FlagCaindo[parametroBarril]
         loadn r0, #1
-        storei r4, r0              ;FlagCaindo[parametroBarril] == 1
+        storei r4, r0              ;FlagCaindo[parametroBarril] == 1 porque o Barril já começou a cair
         
-        inc r1
+        inc r1  ;aumenta o índice IncRandBarril[parametroBarril] (ex: 0 para 1)
 
         loadn r0, #6
         cmp r1, r0                 ;Compara se o índice já chegou no fim da tabela
@@ -515,7 +518,7 @@ PosicaoInicialBarril:
         loadn r1, #0
 
         StoreIncBarril:
-            storei r3, r1 ;Ele armazena o novo índice no r3 -> endereço IncRandBarril[parêmetro]
+            storei r3, r1 ;Ele armazena o novo índice no r3 -> endereço IncRandBarril[parametroBarril]
 
         RtsPosicaoInicialBarril:
             pop r4
@@ -535,33 +538,28 @@ CairBarril:
     loadn r0, #0
     loadn r3, #posBarril
     load r4, parametroBarril
-    add r3, r3, r4 ;posBarril[r4] bonitinho, apontado já
-    loadi r2, r3 ;r2 == posBarrilatual
+    add r3, r3, r4 ;r3 == ENDEREÇO posBarril [parametroBarril] -> não vou mexer mais no r3!! 
+    loadi r2, r3 ;r2 == posBarril[parametroBarril]
 
+    ;tem que apagar primeiro, pois eu atualizo a posAntBarril no desenhaBarril, ou seja, ele ia desenhar e apagar logo em seguida
     call ApagaBarril
 
     loadn r1, #40
-    add r0, r1, r2 ;Barril desce uma linha
+    add r0, r2, r1 ;Barril desce uma linha
 
-    ;Comparação se chegou no chão
-    div r4, r0, r1
-    loadn r1, #29
-    cmp r4, r1
-    jeq Nochao
+    ;Comparação se chegou no chão:
+        div r4, r0, r1
+        loadn r1, #29
+        cmp r4, r1
+        jeq Nochao
 
     call DesenhaBarril
-    storei r3, r0 ;posbarril[r4] == r0 já na próxima linha
+    storei r3, r0 ;posbarril[parametroBarril] == r0 já na próxima linha
 
-    loadn r0, #posAntBarril
-    load r1, parametroBarril
-    add r0, r1, r0 ;posAntBarril[r1]
-    
-    storei r0, r2 ;posAntBarril[r1]
-
-    ;Vejo se colidiu com o mário
-    load r0, posAntMario
-    cmp r0, r2
-    ceq Morreu
+    ;Vejo se colidiu com o mário:
+        load r0, posAntMario
+        cmp r0, r2
+        ceq Morreu
     
     jmp RtsCairBarril
 
@@ -572,7 +570,7 @@ CairBarril:
         add r3, r3, r1             ;r3 = endereço da FlagCaindo[parametroBarril]
         storei r3, r0              ;zera a FlagCaindo[parametroBarril]
 
-        call ZerarFlag
+        call ZerarFlag             ;zera a FlagColuna
 
     RtsCairBarril:
         pop r4
@@ -590,9 +588,9 @@ AcharIncRandBarril:
     push r4
 
     load r1, parametroBarril        ;para saber qual barril vai cair
-    loadn r0, #IncRandBarril        ;Endereço do Vetor dos Incrementos
+    loadn r0, #IncRandBarril        ;Endereço do vetor dos índices
     add r0, r0, r1                  ;r0 == Endereço IncRandBarril[parametroBarril]
-    loadi r2, r0                    ;r2 == valor do IncRandBarril[parametroBarril]
+    loadi r2, r0                    ;r2 == IncRandBarril[parametroBarril]
 
     LoopFlags: ;Até achar a flag livre
         loadn r1, #FlagColuna
@@ -603,21 +601,21 @@ AcharIncRandBarril:
         cmp r3, r4
         jeq RtsAcharIncRandBarril ;se a flag está desligada, rts
 
-        inc r2 ;incremento o índice do barril
+        inc r2 ;incrementa o índice do barril
 
-        ;vê se precisa zerar o índice
-        loadn r1, #6
-        cmp r1, r2
-        jne LoopFlags
+        ;vê se precisa zerar o índice:
+            loadn r1, #6
+            cmp r1, r2
+            jne LoopFlags
 
-        ;zera o índice
-        loadn r2, #0
-        jmp LoopFlags
+        ;zera o índice:
+            loadn r2, #0
+            jmp LoopFlags
 
     RtsAcharIncRandBarril:
         storei r0, r2 ;r0 tem o endereço do IncRandBarril[parametroBarril]
 
-        call LigarFlag
+        call LigarFlag ;Assim que eu acho qual coluna ele vai cair, pode ligar a FlagColuna
 
         pop r4
         pop r3
@@ -634,10 +632,10 @@ LigarFlag:
     loadn r0, #IncRandBarril
     load r1, parametroBarril
     add r0, r0, r1
-    loadi r2, r0 ;valor do incremento do IncRandBarril[parametroBarril]
+    loadi r2, r0 ;valor do índice(0 a 5) do IncRandBarril[parametroBarril]
 
     loadn r1, #FlagColuna
-    add r1, r1, r2 ;Endereço FlagColuna[r2]
+    add r1, r1, r2 ;Endereço FlagColuna[IncRandBarril[parametroBarril]]
 
     loadn r0, #1
     storei r1, r0 ;Flag Ligada!
@@ -656,7 +654,7 @@ ZerarFlag:
     loadn r0, #IncRandBarril
     load r1, parametroBarril
     add r0, r0, r1
-    loadi r2, r0 ;valor do incremento do IncRandBarril[parametroBarril]
+    loadi r2, r0 ;valor do índice do IncRandBarril[parametroBarril]
 
     ;como IncRandBarril sempre aponta já para a próxima coluna
     ;confere primeiro, se é zero, caso não seja: r2--
@@ -673,7 +671,7 @@ ZerarFlag:
 
     DesligaFlag:
         loadn r1, #FlagColuna
-        add r1, r1, r2 ;Endereço FlagColuna[r2]
+        add r1, r1, r2 ;endereço FlagColuna[IncRandBarril[parametroBarril]]
 
         loadn r0, #0
         storei r1, r0 ;Flag Desligada!
@@ -695,8 +693,8 @@ Morreu:
 
     call ApagaTela
 
-    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #30720  			; cor branca!
+    loadn r1, #tela4Linha0	    ;endereco onde comeca a primeira linha do cenario
+	loadn r2, #30720  			;cor roxa
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -705,30 +703,32 @@ Morreu:
     loadn r3, #'n'
 
     LoopMorreu:
-        inchar r1
-        inc r2
-        
-        cmp r1, r3
+        inchar r1 ;lê o que a pessoa escreveu
+    
+        inc r2    ;contador++
+    
+        cmp r1, r3 ;se ele digitou 'n'
         jeq fim
 
-        cmp r1, r0
+        cmp r1, r0 ;se ele digitou 's'
         jeq SimM
 
-        jmp LoopMorreu
+        jmp LoopMorreu ;se ele não digitou/digitou outra coisa
 
     SimM:
-		loadn r5, #5
-		mod r3, r2, r5
+        ;gera o randômico sempre para o barril 0 -> mais rápido
+		loadn r5, #6 ;tamanho da tabela de randômicos
+		mod r3, r2, r5 ;deixo o valor entre 0 e 5
 
-		loadn r0, #IncRandBarril
-		storei r0, r3
+		loadn r0, #IncRandBarril ;endereço do índice do barril[0]
+		storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
 
         pop r3
         pop r2
         pop r1
         pop r0
 
-        pop r0
+        pop r0 ;desempilha tudo, não vai ter o rts, vai direto no main
 
         jmp Restart
 
@@ -749,9 +749,10 @@ DesenhaBarril:
     loadn r3, #'O'
     outchar r3, r2
 
+    ;Atualiza o posAntBarril
     loadn r0, #posAntBarril
-    add r0, r0, r1
-    storei r0, r2
+    add r0, r0, r1  ;endereço posAntBarril[parametroBarril]
+    storei r0, r2   ;guardo o valor do posBarril[parametroBarril] no endereço do posAntBarril[parametroBarril]
     
     pop r3
     pop r2
@@ -770,19 +771,18 @@ ApagaBarril:
     loadn r0, #posAntBarril
     load r1, parametroBarril
     add r0, r1, r0
-    loadi r2, r0           ; r2 = pos anterior do barril (posição da tela 0~1199)
+    loadi r2, r0            ;r2 = posAntBarril[parametroBarril]
 
-	; --> R0 = Tela1Linha0 + posAnt + posAnt/40  ; tem que somar posAnt/40 no ponteiro pois as linas da string terminam com /0 !!
-	loadn R1, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	add r0, R1, r2	; R2 = Tela1Linha0 + posAnt
-	loadn R4, #40
-	div R3, r2, R4	; R3 = posAnt/40
-	add r0, r0, R3	; R2 = Tela1Linha0 + posAnt + posAnt/40
+	loadn r1, #tela0Linha0	;endereço do cenário (tela1 + tela2)
+	add r0, r1, r2	        ;r2 = tela0Linha0 + posAntBarril
+	loadn r4, #40
+	div r3, r2, r4	        ;r3 = linha do posAntBarril
+	add r0, r0, r3	        ;r0 = endereço tela0Linha0 + posAntBarril + linha do posAntBarril
 	
-	loadi R5, r0	; R5 = Char (Tela(posAnt))
+	loadi r5, r0	        ;vê o que tinha nesse endereço
 
 
-    outchar r5, r2         ; Escreve esse caractere na posição da tela
+    outchar r5, r2         ;redesenha o que tinha antes -> sem o barril
 
     pop r5
     pop r4
@@ -820,12 +820,12 @@ ImprimeTela:
 	;r1 = endereco onde comeca a primeira linha do Cenario
 	;r2 = cor do Cenario para ser impresso
 
-	push r0	; protege o r3 na pilha para ser usado na subrotina
-	push r1	; protege o r1 na pilha para preservar seu valor
-	push r2	; protege o r1 na pilha para preservar seu valor
-	push r3	; protege o r3 na pilha para ser usado na subrotina
-	push r4	; protege o r4 na pilha para ser usado na subrotina
-	push r5	; protege o r4 na pilha para ser usado na subrotina
+	push r0	
+	push r1	
+	push r2	
+	push r3	
+	push r4
+	push r5
 
 	loadn R0, #0  	; posicao inicial tem que ser o comeco da tela!
 	loadn R3, #40  	; Incremento da posicao da tela!
@@ -839,7 +839,7 @@ ImprimeTela:
 		cmp r0, r5			; Compara r0 com 1200
 		jne ImprimeTela_Loop	; Enquanto r0 < 1200
 
-	pop r5	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r5	
 	pop r4
 	pop r3
 	pop r2
@@ -855,11 +855,11 @@ ImprimeStr:
     ;r1 = endereco onde comeca a mensagem
     ;r2 = cor da mensagem
 
-	push r0	; protege o r0 na pilha para preservar seu valor
-	push r1	; protege o r1 na pilha para preservar seu valor
-	push r2	; protege o r1 na pilha para preservar seu valor
-	push r3	; protege o r3 na pilha para ser usado na subrotina
-	push r4	; protege o r4 na pilha para ser usado na subrotina
+	push r0	
+	push r1	
+	push r2	
+	push r3	
+	push r4
 	
 	loadn r3, #'\0'	; Criterio de parada
 
@@ -881,7 +881,6 @@ ImprimeStr:
 	pop r0
 	rts
 	
-
 ;--------------------------------------------
 ;               Imprime Tela 2
 ;--------------------------------------------
@@ -889,29 +888,29 @@ ImprimeTela2:
 	;r1 = endereco onde comeca a primeira linha do Cenario
 	;r2 = cor do Cenario para ser impresso
 
-	push r0	; protege o r3 na pilha para ser usado na subrotina
-	push r1	; protege o r1 na pilha para preservar seu valor
-	push r2	; protege o r1 na pilha para preservar seu valor
-	push r3	; protege o r3 na pilha para ser usado na subrotina
-	push r4	; protege o r4 na pilha para ser usado na subrotina
-	push r5	; protege o r5 na pilha para ser usado na subrotina
-	push r6	; protege o r6 na pilha para ser usado na subrotina
+	push r0	
+	push r1	
+	push r2	
+	push r3	
+	push r4
+	push r5	
+	push r6	
 
-	loadn R0, #0  	; posicao inicial tem que ser o comeco da tela!
-	loadn R3, #40  	; Incremento da posicao da tela!
-	loadn R4, #41  	; incremento do ponteiro das linhas da tela
-	loadn R5, #1200 ; Limite da tela!
-	loadn R6, #tela0Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r0, #0  	        ;posicao inicial tem que ser o comeco da tela
+	loadn r3, #40  	        ;incremento da posicao da tela
+	loadn r4, #41  	        ;incremento do ponteiro das linhas da tela
+	loadn r5, #1200         ;limite da tela
+	loadn r6, #tela0Linha0	;endereco onde comeca a primeira linha do cenario
 	
    ImprimeTela2_Loop:
 		call ImprimeStr2
-		add r0, r0, r3  	; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
-		add r1, r1, r4  	; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 porcausa do /0 !!) --> r1 = r1 + 41
-		add r6, r6, r4  	; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 porcausa do /0 !!) --> r1 = r1 + 41
-		cmp r0, r5			; Compara r0 com 1200
-		jne ImprimeTela2_Loop	; Enquanto r0 < 1200
+		add r0, r0, r3  	;incrementa posicao para a segunda linha na tela (r0 = r0 + 40)
+		add r1, r1, r4  	;incrementa o ponteiro para o comeco da proxima linha na memoria (40 + '/0') (r1 = r1 + 41)
+		add r6, r6, r4  	;incrementa o ponteiro para o comeco da proxima linha na memoria (40 + '/0') (r1 = r1 + 41)
+		cmp r0, r5			;compara r0 com 1200
+		jne ImprimeTela2_Loop	
 
-	pop r6	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r6	
 	pop r5
 	pop r4
 	pop r3
@@ -928,11 +927,11 @@ ImprimeStr2:
     ;r1 = endereco onde comeca a mensagem
     ;r2 = cor da mensagem. 
 	
-    push r0	; protege o r0 na pilha para preservar seu valor
-	push r1	; protege o r1 na pilha para preservar seu valor
-	push r2	; protege o r1 na pilha para preservar seu valor
-	push r3	; protege o r3 na pilha para ser usado na subrotina
-	push r4	; protege o r4 na pilha para ser usado na subrotina
+    push r0	
+	push r1	
+	push r2	
+	push r3	
+	push r4
 	push r5	; protege o r5 na pilha para ser usado na subrotina
 	push r6	; protege o r6 na pilha para ser usado na subrotina
 	
@@ -1171,7 +1170,7 @@ tela5Linha18 : string "  ________|_____________y___l_________  "
 tela5Linha19 : string "  l                                   y "
 tela5Linha20 : string "   l            SIMOES               y  "
 tela5Linha21 : string "    l                               y   "
-tela5Linha22 : string "     l____________________________ y    "
+tela5Linha22 : string "     l_____________________________y    "
 tela5Linha23 : string "                                        "
 tela5Linha24 : string "                                        "
 tela5Linha25 : string "        QUER JOGAR DE NOVO? <s/n>       "
