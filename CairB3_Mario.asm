@@ -15,11 +15,6 @@ posAntBarril: var #5
     static posAntBarril + #4, #0 ;inicializa no 0
 
 FlagCaindo: var #5
-    static FlagCaindo + #0, #0 ;inicializa no 0
-    static FlagCaindo + #1, #0 ;inicializa no 0
-    static FlagCaindo + #2, #0 ;inicializa no 0
-    static FlagCaindo + #3, #0 ;inicializa no 0
-    static FlagCaindo + #4, #0 ;inicializa no 0
 
 parametroBarril: var #1 ;Para saber qual Barril está caindo
 
@@ -39,29 +34,16 @@ RandBarril: var #6
     static RandBarril + #5, #244
 
 FlagColuna: var #6 ;inicializa no zero == flag desligada
-    static FlagColuna + #0, #0
-    static FlagColuna + #1, #0
-    static FlagColuna + #2, #0
-    static FlagColuna + #3, #0
-    static FlagColuna + #4, #0
-    static FlagColuna + #5, #0
 
 posMario: var #1
 posAntMario: var #1
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-Msn0: string "V O C E   V E N C E U !!!"
-Msn1: string "Quer jogar novamente? <s/n>"
 
 Letra: var #1			; Contem a letra que foi digitada
 
 ;Codigo principal
 main:
-	Menu:
-
-	loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #1536  			; cor branca!
+	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #1536  			; cor branca!
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -81,7 +63,9 @@ main:
 		loadn r0, #IncRandBarril
 		storei r0, r3
 
-    Reestart:
+    Restart:
+        call Inicializacao
+
         call ApagaTela
         loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
         loadn R2, #1536  			; cor branca!
@@ -95,10 +79,11 @@ main:
         store posMario, r0 ;mario começa na linha 27, coluna 39
         call DesenhaMario
 
-        loadn R0, #0	
-        loadn R2, #0	
+        loadn r0, #0	
+        loadn r2, #0	
 
         Loop:
+
             call MoveMario
 
             loadn r7, #0 ;r7 vai ser meio que um parâmetro
@@ -142,8 +127,50 @@ main:
             
             jmp Loop
 	
-fim:
-    halt
+    fim:
+        halt
+
+;--------------------------------------------
+;               Inicialização
+;--------------------------------------------
+Inicializacao:
+    ;Zera as flags
+    push r0
+    push r1
+    push r2
+    push r3
+
+    loadn r0, #FlagCaindo
+    loadn r2, #5
+    loadn r1, #0
+    store posAntMario, r1
+    loadn r3, #0
+    LoopFlagCaindo0:
+        storei r0, r1
+
+        inc r0
+        inc r3
+
+        cmp r3, r2
+        jne LoopFlagCaindo0
+        
+    loadn r3, #0
+    loadn r0, #FlagColuna
+    loadn r2, #6
+    LoopFlagColuna0:
+        storei r0, r1
+
+        inc r0
+        inc r3
+
+        cmp r3, r2
+        jne LoopFlagColuna0
+
+    pop r3
+    pop r2
+    pop r1
+    pop r0
+    rts
 
 ;--------------------------------------------
 ;               MoveMario
@@ -152,6 +179,11 @@ MoveMario:
     push r0
     push r1
     push r2
+
+    load r0, posAntMario
+    loadn r2, #135 ;linha 3 coluna 15
+    cmp r0, r2
+    ceq Venceu
 
 	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
 
@@ -182,10 +214,6 @@ MoveMario_RecalculaPos:
     push r6
 
     load r0, posMario
-    store posAntMario, r0
-    loadn r2, #160 ;linha 3 coluna 30
-    ;cmp r1, r2
-    ;jle MoveMario_venceu ; (comentado por estar inativo)
 
     inchar r1 ; lê o teclado
 
@@ -297,7 +325,55 @@ MoveMario_RecalculaPos:
 
         sub r0, r0, r2 ; sobe 1 linha
         jmp StoreposMario
+
+;--------------------------------------------
+;                 Venceu
+;--------------------------------------------
+Venceu:
+    push r0
+    push r1
+    push r2
+    push r3
+
+    call ApagaTela
+
+    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #1536  			; cor branca!
+	call ImprimeTela
+
+	loadn r2, #0 ;inicializa o contador com 0 
+
+    loadn r0, #'s'
+    loadn r3, #'n'
+
+    LoopVenceu:
+        inchar r1
+        inc r2
         
+        cmp r1, r3
+        jeq fim
+
+        cmp r1, r0
+        jeq Sim
+
+        jmp LoopVenceu
+
+    Sim:
+		loadn r5, #5
+		mod r3, r2, r5
+
+		loadn r0, #IncRandBarril
+		storei r0, r3
+
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+
+        pop r0
+
+        jmp Restart
+
 ;--------------------------------------------
 ;            Desenha e Apaga Mario 
 ;--------------------------------------------
@@ -549,7 +625,7 @@ ZerarFlag:
     cmp r2, r3
     jne SubIncRandBarril
 
-    loadn r2 #5 ;como os índices são ciclicos, antes de 0 é 5
+    loadn r2, #5 ;como os índices são ciclicos, antes de 0 é 5
 
     jmp DesligaFlag
 
@@ -649,13 +725,12 @@ Delay:
         pop r0
         rts
 
-;********************************************************
-;                       IMPRIME TELA
-;********************************************************	
-
-ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
-		;  r1 = endereco onde comeca a primeira linha do Cenario
-		;  r2 = cor do Cenario para ser impresso
+;--------------------------------------------
+;             Imprime Tela
+;--------------------------------------------
+ImprimeTela:
+	;r1 = endereco onde comeca a primeira linha do Cenario
+	;r2 = cor do Cenario para ser impresso
 
 	push r0	; protege o r3 na pilha para ser usado na subrotina
 	push r1	; protege o r1 na pilha para preservar seu valor
@@ -684,11 +759,14 @@ ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
 	pop r0
 	rts
 				
-;********************************************************
-;                   IMPRIME STRING
-;********************************************************
-	
-ImprimeStr:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
+;--------------------------------------------
+;             Imprime String 
+;--------------------------------------------
+ImprimeStr:	 
+    ;r0 = Posicao da tela que o primeiro caractere da mensagem será impresso 
+    ;r1 = endereco onde comeca a mensagem
+    ;r2 = cor da mensagem
+
 	push r0	; protege o r0 na pilha para preservar seu valor
 	push r1	; protege o r1 na pilha para preservar seu valor
 	push r2	; protege o r1 na pilha para preservar seu valor
@@ -708,7 +786,7 @@ ImprimeStr:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o pr
 		jmp ImprimeStr_Loop
 	
    ImprimeStr_Sai:	
-	pop r4	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r4	
 	pop r3
 	pop r2
 	pop r1
@@ -716,13 +794,12 @@ ImprimeStr:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o pr
 	rts
 	
 
-;********************************************************
-;                       IMPRIME TELA2
-;********************************************************	
-
-ImprimeTela2: 	;  Rotina de Impresao de Cenario na Tela Inteira
-		;  r1 = endereco onde comeca a primeira linha do Cenario
-		;  r2 = cor do Cenario para ser impresso
+;--------------------------------------------
+;               Imprime Tela 2
+;--------------------------------------------
+ImprimeTela2:
+	;r1 = endereco onde comeca a primeira linha do Cenario
+	;r2 = cor do Cenario para ser impresso
 
 	push r0	; protege o r3 na pilha para ser usado na subrotina
 	push r1	; protege o r1 na pilha para preservar seu valor
@@ -755,12 +832,15 @@ ImprimeTela2: 	;  Rotina de Impresao de Cenario na Tela Inteira
 	pop r0
 	rts
 				
-;********************************************************
-;                   IMPRIME STRING2
-;********************************************************
+;--------------------------------------------
+;             Imprime String 2
+;--------------------------------------------
+ImprimeStr2: 
+    ;r0 = Posicao da tela que o primeiro caractere da mensagem será impresso  
+    ;r1 = endereco onde comeca a mensagem
+    ;r2 = cor da mensagem. 
 	
-ImprimeStr2:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
-	push r0	; protege o r0 na pilha para preservar seu valor
+    push r0	; protege o r0 na pilha para preservar seu valor
 	push r1	; protege o r1 na pilha para preservar seu valor
 	push r2	; protege o r1 na pilha para preservar seu valor
 	push r3	; protege o r3 na pilha para ser usado na subrotina
@@ -797,9 +877,7 @@ ImprimeStr2:	;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o p
 	pop r1
 	pop r0
 	rts
-	
-
-;------------------------		
+		
 ;********************************************************
 ;                   DIGITE UMA LETRA
 ;********************************************************
@@ -820,13 +898,9 @@ DigLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra
 	pop r0
 	rts
 
-
-
-;----------------
-	
-;********************************************************
-;                       APAGA TELA
-;********************************************************
+;--------------------------------------------
+;                 Apaga Tela
+;--------------------------------------------
 ApagaTela:
 	push r0
 	push r1
@@ -843,9 +917,10 @@ ApagaTela:
 	pop r0
 	rts	
 	
-;------------------------	
-; Declara uma tela vazia para ser preenchida em tempo de execussao:
-
+;--------------------------------------------
+;                   TELAS
+;--------------------------------------------
+;Endereço das telas desenhadas (STR2 - 1+2)
 tela0Linha0  : string "                                        "
 tela0Linha1  : string "                                        "
 tela0Linha2  : string "                                        "
@@ -877,7 +952,7 @@ tela0Linha27 : string "                                        "
 tela0Linha28 : string "                                        "
 tela0Linha29 : string "                                        "	
 
-; Declara e preenche tela linha por linha (40 caracteres):
+;Tela 01: Chão
 tela1Linha0  : string "                                        "
 tela1Linha1  : string "                                        "
 tela1Linha2  : string "                                        "
@@ -909,9 +984,7 @@ tela1Linha27 : string "                                        "
 tela1Linha28 : string "========================================"
 tela1Linha29 : string "                                        "
 
-
-
-; Declara e preenche tela linha por linha (40 caracteres):
+;Tela 02: Escadas
 tela2Linha0  : string "                                        "
 tela2Linha1  : string "                                        "
 tela2Linha2  : string "                                        "
@@ -944,7 +1017,7 @@ tela2Linha28 : string "                                        "
 tela2Linha29 : string "                                        "
 
 
-; Declara e preenche tela linha por linha (40 caracteres):
+;Tela 03: o meio da escada para subir
 tela3Linha0  : string "                                        "
 tela3Linha1  : string "                                        "
 tela3Linha2  : string "                                        "
@@ -976,6 +1049,7 @@ tela3Linha27 : string "    n                                   "
 tela3Linha28 : string "                                        "
 tela3Linha29 : string "                                        "
 
+;Tela menu:
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
 tela4Linha2  : string "    PRESSIONE ENTER PARA INICIAR        "
