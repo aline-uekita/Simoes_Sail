@@ -70,7 +70,7 @@ main:
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600  ;COR DA Onda
+        loadn R2, #10240  ;COR DA Onda
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn r0, #1119
