@@ -41,7 +41,7 @@ posAntMario: var #1
 ;Codigo principal
 main:
 	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #1536  			; cor branca!
+	loadn r2, #30720  			; cor branca!
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -66,11 +66,11 @@ main:
 
         call ApagaTela
         loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600   			; cor branca!
+        loadn R2, #25600  			; cor branca!
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600   ;COR DA Onda
+        loadn R2, #25600  ;COR DA Onda
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn r0, #1119
@@ -180,12 +180,18 @@ MoveMario:
     push r1
     push r2
 
-    call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
-
     load r0, posAntMario
     loadn r2, #135 ;linha 3 coluna 15
     cmp r0, r2
     ceq Venceu
+
+	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
+
+    ;Só apaga e Redesenha se (pos != posAnt)
+	load r0, posMario
+	load r1, posAntMario
+	cmp r0, r1
+	jeq RtsMoveMario
 	
 	;Se Próxima instrucao do mario for o chao ou parede, nao move
 	call ApagaMario
@@ -270,7 +276,6 @@ MoveMario_RecalculaPos:
         jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
 
         dec r0              ; anda para a esquerda
-
         jmp StoreposMario
 
     ;Move para direita
@@ -327,34 +332,26 @@ MoveMario_RecalculaPos:
         jmp StoreposMario
 
     MoveMario_RecalculaPos_S:
-    ; Posição abaixo
-    loadn r2, #40
-    mov   r6, r0
-    add   r6, r6, r2     ; descer uma linha
+        loadn r2, #40
 
-    ; Calcula linha e coluna da posição abaixo
-    div   r1, r6, r2     ; linha
-    mod   r4, r6, r2     ; coluna
+        ; calcula o endereço do caractere no mapa da escada
+        loadn r1, #tela3Linha0
+        add r4, r0, r1    ; tela3Linha0 + pos
+        div r5, r0, r2    ; pos / 40 (quantidade de \0 anteriores)
+        add r4, r4, r5    ; soma ajuste da linha
 
-    ; Calcula o endereço da posição na tela3 (mapa de escadas)
-    loadn r3, #41         ; 40 + \0
-    mul   r1, r1, r3
-    loadn r3, #tela3Linha0
-    add   r3, r3, r1
-    add   r3, r3, r4
-    loadi r6, r3
+        loadi r6, r4      ; pega o caractere do mapa da escada
 
-    ; Verifica se há escada
-    loadn r5, #'n'
-    cmp   r6, r5
-    jne   RtsMoveMario_RecalculaPos
+        loadn r5, #'n'
+        cmp r6, r5
+        jne RtsMoveMario_RecalculaPos
 
-    ; Pode descer
-    add   r0, r0, #r2
-    call Delay
-    call Delay
-    call Delay
-    jmp   StoreposMario
+        add r0, r0, r2 ; sobe 1 linha
+
+        call Delay
+        call Delay
+
+        jmp StoreposMario
 
 
 ;--------------------------------------------
@@ -368,8 +365,8 @@ Venceu:
 
     call ApagaTela
 
-    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #1536  			; cor branca!
+    loadn r1, #tela5Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #30720 			; cor branca!
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -691,8 +688,8 @@ Morreu:
 
     call ApagaTela
 
-    loadn r1, #telaFinalPLinha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #1536  			; cor branca!
+    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #30720  			; cor branca!
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -742,7 +739,7 @@ DesenhaBarril:
     add r0, r1, r0 ;r0 = endereço do posBarril[parametroBarril]
     loadi r2, r0 ;r2 = valor do posBarril[parametroBarril]
 
-    loadn r3, #'t'
+    loadn r3, #'O'
     outchar r3, r2
 
     loadn r0, #posAntBarril
@@ -1115,28 +1112,28 @@ tela3Linha29 : string "                                        "
 ;Tela menu:
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
-tela4Linha2  : string "                                        "
-tela4Linha3  : string "                                        "
-tela4Linha4  : string "                   ____                 "
-tela4Linha5  : string "                  / || \                "
-tela4Linha6  : string "                 /  ||  \               "
-tela4Linha7  : string "                /   ||   \              "
-tela4Linha8  : string "               /    ||    \             "
-tela4Linha9  : string "               \    ||    /             "
-tela4Linha10 : string "                \   ||   /              "
-tela4Linha11 : string "                 \  ||  /               "
-tela4Linha12 : string "                  \ || /                "
-tela4Linha13 : string "                   \||/                 "
-tela4Linha14 : string "         ___________||__________        "
-tela4Linha15 : string "         \                     /        "
-tela4Linha16 : string "          \       SIMÔES      /         "
-tela4Linha17 : string "           \_________________/          "
+tela4Linha2  : string "    PRESSIONE ENTER PARA INICIAR        "
+tela4Linha3  : string "    E RECUPERAR O BARCO DO SIMOES       "
+tela4Linha4  : string "                                        "
+tela4Linha5  : string "                                        "
+tela4Linha6  : string "                                        "
+tela4Linha7  : string "               BBBBBBBB                 "
+tela4Linha8  : string "              BBBBBBBBBB                "
+tela4Linha9  : string "           BBBBBBBBBBBBBBBB             "
+tela4Linha10 : string "          BBBBBBBBBBBBBBBBBB            "
+tela4Linha11 : string "          BBBB   SIMOES   BBB           "
+tela4Linha12 : string "          BBBBBBBBBBBBBBBBBB            "
+tela4Linha13 : string "           BBBBBBBBBBBBBBBB             "
+tela4Linha14 : string "              BBBBBBBBBB                "
+tela4Linha15 : string "                                        "
+tela4Linha16 : string "                                        "
+tela4Linha17 : string "                                        "
 tela4Linha18 : string "                                        "
-tela4Linha19 : string "                                        "
-tela4Linha20 : string "                                        "
-tela4Linha21 : string "                                        "
-tela4Linha22 : string "                                        "
-tela4Linha23 : string "                                        "
+tela4Linha19 : string "                  __                    "
+tela4Linha20 : string "                 y  l                   "
+tela4Linha21 : string "                y____l                  "
+tela4Linha22 : string "                l    y                  "
+tela4Linha23 : string "                 l__y                   "
 tela4Linha24 : string "                                        "
 tela4Linha25 : string "                                        "
 tela4Linha26 : string "                                        "
@@ -1144,65 +1141,34 @@ tela4Linha27 : string "                                        "
 tela4Linha28 : string "                                        "
 tela4Linha29 : string "                                        "
 
-
-telaFinalVLinha0  : string "                                        "
-telaFinalVLinha1  : string "                                        "
-telaFinalVLinha2  : string "                                        "
-telaFinalVLinha3  : string "                                        "
-telaFinalVLinha4  : string "                                        "
-telaFinalVLinha5  : string "                                        "
-telaFinalVLinha6  : string "               VOCÊ VENCEU              "
-telaFinalVLinha7  : string "                                        "
-telaFinalVLinha8  : string "        AGORA ESTA PRONTO PARA O        "
-telaFinalVLinha9  : string "              ATAQUE ZUMBI              "
-telaFinalVLinha10 : string "           _____                        "
-telaFinalVLinha11 : string "          |     \                       "
-telaFinalVLinha12 : string "          |      \                      "
-telaFinalVLinha13 : string "          |      /        O     __      "
-telaFinalVLinha14 : string "          |_____/        /|\   /  \     "
-telaFinalVLinha15 : string "          |             / | \ | SS |    "
-telaFinalVLinha16 : string "          |               |   | SS |    "
-telaFinalVLinha17 : string "          |              / \   \__/     "
-telaFinalVLinha18 : string "  ________|_____________/___\_________  "
-telaFinalVLinha19 : string "  \                                   / "
-telaFinalVLinha20 : string "   \            SIMÕES               /  "
-telaFinalVLinha21 : string "    \                               /   "
-telaFinalVLinha22 : string "     \____________________________ /    "
-telaFinalVLinha23 : string "                                        "
-telaFinalVLinha24 : string "                                        "
-telaFinalVLinha25 : string "                                        "
-telaFinalVLinha26 : string "                                        "
-telaFinalVLinha27 : string "                                        "
-telaFinalVLinha28 : string "                                        "
-telaFinalVLinha29 : string "                                        "
-
-telaFinalPLinha0  : string "                                        "
-telaFinalPLinha1  : string "                                        "
-telaFinalPLinha2  : string "                                        "
-telaFinalPLinha3  : string "         O TUBARÃO TE PEGOU EM          "
-telaFinalPLinha4  : string "                                        "
-telaFinalPLinha5  : string "                                        "
-telaFinalPLinha6  : string "              GAME OVER                 "
-telaFinalPLinha7  : string "                                        "
-telaFinalPLinha8  : string "        QUER TENTAR NOVAMENTE?<S/N>     "
-telaFinalPLinha9  : string "                                        "
-telaFinalPLinha10 : string "                                        "
-telaFinalPLinha11 : string "                                        "
-telaFinalPLinha12 : string "                                        "
-telaFinalPLinha13 : string "                                        "
-telaFinalPLinha14 : string "        ____                            "
-telaFinalPLinha15 : string "       /X  x\       _____               "
-telaFinalPLinha16 : string "       \ __ /      /    /               "
-telaFinalPLinha17 : string "        \__/      /     \               "
-telaFinalPLinha18 : string "         /|\      |      /              "
-telaFinalPLinha19 : string "        / | \     |      \              "
-telaFinalPLinha20 : string "       /  |  \    |       |             "
-telaFinalPLinha21 : string "          |       |       |             "
-telaFinalPLinha22 : string "         / \      |       |             "
-telaFinalPLinha23 : string "        /   \     |       |             "
-telaFinalPLinha24 : string "       /     \     \______/             "
-telaFinalPLinha25 : string "                                        "
-telaFinalPLinha26 : string "                                        "
-telaFinalPLinha27 : string "                                        "
-telaFinalPLinha28 : string "                                        "
-telaFinalPLinha29 : string "                                        "
+;Tela Venceu:
+tela5Linha0  : string "                                        "
+tela5Linha1  : string "                                        "
+tela5Linha2  : string "                                        "
+tela5Linha3  : string "                                        "
+tela5Linha4  : string "                                        "
+tela5Linha5  : string "                                        "
+tela5Linha6  : string "               VOCE VENCEU              "
+tela5Linha7  : string "                                        "
+tela5Linha8  : string "        AGORA ESTA PRONTO PARA O        "
+tela5Linha9  : string "              ATAQUE ZUMBI              "
+tela5Linha10 : string "           _____                        "
+tela5Linha11 : string "          |     l                       "
+tela5Linha12 : string "          |      l                      "
+tela5Linha13 : string "          |      y        O     __      "
+tela5Linha14 : string "          |_____y        y|l   y  l     "
+tela5Linha15 : string "          |             y | l | SS |    "
+tela5Linha16 : string "          |               |   | SS |    "
+tela5Linha17 : string "          |              y l   y__l     "
+tela5Linha18 : string "  ________|_____________y___l_________  "
+tela5Linha19 : string "  l                                   y "
+tela5Linha20 : string "   l            SIMOES               y  "
+tela5Linha21 : string "    l                               y   "
+tela5Linha22 : string "     l____________________________ y    "
+tela5Linha23 : string "                                        "
+tela5Linha24 : string "                                        "
+tela5Linha25 : string "        QUER JOGAR DE NOVO? <s/n>       "
+tela5Linha26 : string "                                        "
+tela5Linha27 : string "                                        "
+tela5Linha28 : string "                                        "
+tela5Linha29 : string "                                        "
