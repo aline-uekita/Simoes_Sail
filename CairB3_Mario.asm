@@ -126,6 +126,8 @@ main:
             jmp Loop
 	
     fim:
+        call ApagaTela
+        
         halt
 
 ;--------------------------------------------
@@ -178,18 +180,12 @@ MoveMario:
     push r1
     push r2
 
+    call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
+
     load r0, posAntMario
     loadn r2, #135 ;linha 3 coluna 15
     cmp r0, r2
     ceq Venceu
-
-	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
-
-    ;Só apaga e Redesenha se (pos != posAnt)
-	load r0, posMario
-	load r1, posAntMario
-	cmp r0, r1
-	jeq RtsMoveMario
 	
 	;Se Próxima instrucao do mario for o chao ou parede, nao move
 	call ApagaMario
@@ -226,6 +222,10 @@ MoveMario_RecalculaPos:
     loadn r2, #'w'
     cmp r1, r2
     jeq MoveMario_RecalculaPos_W
+
+    loadn r2, #'s'
+    cmp r1, r2
+    jeq MoveMario_RecalculaPos_S
 
     StoreposMario:
         store posMario, r0
@@ -270,6 +270,7 @@ MoveMario_RecalculaPos:
         jne RtsMoveMario_RecalculaPos  ; se não for chão, não anda
 
         dec r0              ; anda para a esquerda
+
         jmp StoreposMario
 
     ;Move para direita
@@ -322,7 +323,39 @@ MoveMario_RecalculaPos:
         jne RtsMoveMario_RecalculaPos
 
         sub r0, r0, r2 ; sobe 1 linha
+    
         jmp StoreposMario
+
+    MoveMario_RecalculaPos_S:
+    ; Posição abaixo
+    loadn r2, #40
+    mov   r6, r0
+    add   r6, r6, r2     ; descer uma linha
+
+    ; Calcula linha e coluna da posição abaixo
+    div   r1, r6, r2     ; linha
+    mod   r4, r6, r2     ; coluna
+
+    ; Calcula o endereço da posição na tela3 (mapa de escadas)
+    loadn r3, #41         ; 40 + \0
+    mul   r1, r1, r3
+    loadn r3, #tela3Linha0
+    add   r3, r3, r1
+    add   r3, r3, r4
+    loadi r6, r3
+
+    ; Verifica se há escada
+    loadn r5, #'n'
+    cmp   r6, r5
+    jne   RtsMoveMario_RecalculaPos
+
+    ; Pode descer
+    add   r0, r0, #r2
+    call Delay
+    call Delay
+    call Delay
+    jmp   StoreposMario
+
 
 ;--------------------------------------------
 ;                 Venceu
