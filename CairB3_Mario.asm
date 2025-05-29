@@ -332,27 +332,34 @@ MoveMario_RecalculaPos:
         jmp StoreposMario
 
     MoveMario_RecalculaPos_S:
-        loadn r2, #40
+    ; Posição abaixo
+    loadn r2, #40
+    mov   r6, r0
+    add   r6, r6, r2     ; descer uma linha
 
-        ; calcula o endereço do caractere no mapa da escada
-        loadn r1, #tela3Linha0
-        add r4, r0, r1    ; tela3Linha0 + pos
-        div r5, r0, r2    ; pos / 40 (quantidade de \0 anteriores)
-        add r4, r4, r5    ; soma ajuste da linha
+    ; Calcula linha e coluna da posição abaixo
+    div   r1, r6, r2     ; linha
+    mod   r4, r6, r2     ; coluna
 
-        loadi r6, r4      ; pega o caractere do mapa da escada
+    ; Calcula o endereço da posição na tela3 (mapa de escadas)
+    loadn r3, #41         ; 40 + \0
+    mul   r1, r1, r3
+    loadn r3, #tela3Linha0
+    add   r3, r3, r1
+    add   r3, r3, r4
+    loadi r6, r3
 
-        loadn r5, #'n'
-        cmp r6, r5
-        jne RtsMoveMario_RecalculaPos
+    ; Verifica se há escada
+    loadn r5, #'n'
+    cmp   r6, r5
+    jne   RtsMoveMario_RecalculaPos
 
-        add r0, r0, r2 ; sobe 1 linha
-
-        call Delay
-        call Delay
-
-        jmp StoreposMario
-
+    ; Pode descer
+    add   r0, r0, r2
+    call Delay
+    call Delay
+    call Delay
+    jmp   StoreposMario
 
 ;--------------------------------------------
 ;                 Venceu
@@ -1159,7 +1166,7 @@ tela5Linha13 : string "          |      y        O     __      "
 tela5Linha14 : string "          |_____y        y|l   y  l     "
 tela5Linha15 : string "          |             y | l | SS |    "
 tela5Linha16 : string "          |               |   | SS |    "
-tela5Linha17 : string "          |              y l   y__l     "
+tela5Linha17 : string "          |              y l   l__y     "
 tela5Linha18 : string "  ________|_____________y___l_________  "
 tela5Linha19 : string "  l                                   y "
 tela5Linha20 : string "   l            SIMOES               y  "
