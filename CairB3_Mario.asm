@@ -66,11 +66,11 @@ main:
 
         call ApagaTela
         loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600  			; cor branca!
+        loadn R2, #25600   			; cor branca!
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600  ;COR DA Onda
+        loadn R2, #25600   ;COR DA Onda
         call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
         
         loadn r0, #1119
@@ -691,7 +691,7 @@ Morreu:
 
     call ApagaTela
 
-    loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+    loadn r1, #telaFinalPLinha0	; Endereco onde comeca a primeira linha do cenario!!
 	loadn r2, #1536  			; cor branca!
 	call ImprimeTela
 
@@ -742,7 +742,7 @@ DesenhaBarril:
     add r0, r1, r0 ;r0 = endereço do posBarril[parametroBarril]
     loadi r2, r0 ;r2 = valor do posBarril[parametroBarril]
 
-    loadn r3, #'O'
+    loadn r3, #'t'
     outchar r3, r2
 
     loadn r0, #posAntBarril
@@ -1115,31 +1115,94 @@ tela3Linha29 : string "                                        "
 ;Tela menu:
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
-tela4Linha2  : string "    PRESSIONE ENTER PARA INICIAR        "
-tela4Linha3  : string "    E RECUPERAR O BARCO DO SIMOES       "
-tela4Linha4  : string "                                        "
-tela4Linha5  : string "                                        "
-tela4Linha6  : string "                                        "
-tela4Linha7  : string "               BBBBBBBB                 "
-tela4Linha8  : string "              BBBBBBBBBB                "
-tela4Linha9  : string "           BBBBBBBBBBBBBBBB             "
-tela4Linha10 : string "          BBBBBBBBBBBBBBBBBB            "
-tela4Linha11 : string "          BBBB   SIMOES   BBB           "
-tela4Linha12 : string "          BBBBBBBBBBBBBBBBBB            "
-tela4Linha13 : string "           BBBBBBBBBBBBBBBB             "
-tela4Linha14 : string "              BBBBBBBBBB                "
-tela4Linha15 : string "                                        "
-tela4Linha16 : string "                                        "
-tela4Linha17 : string "                                        "
+tela4Linha2  : string "                                        "
+tela4Linha3  : string "                                        "
+tela4Linha4  : string "                   ____                 "
+tela4Linha5  : string "                  / || \                "
+tela4Linha6  : string "                 /  ||  \               "
+tela4Linha7  : string "                /   ||   \              "
+tela4Linha8  : string "               /    ||    \             "
+tela4Linha9  : string "               \    ||    /             "
+tela4Linha10 : string "                \   ||   /              "
+tela4Linha11 : string "                 \  ||  /               "
+tela4Linha12 : string "                  \ || /                "
+tela4Linha13 : string "                   \||/                 "
+tela4Linha14 : string "         ___________||__________        "
+tela4Linha15 : string "         \                     /        "
+tela4Linha16 : string "          \       SIMÔES      /         "
+tela4Linha17 : string "           \_________________/          "
 tela4Linha18 : string "                                        "
-tela4Linha19 : string "                  __                    "
-tela4Linha20 : string "                 /  \                   "
-tela4Linha21 : string "                /____\                  "
-tela4Linha22 : string "                \    /                  "
-tela4Linha23 : string "                 \__/                   "
+tela4Linha19 : string "                                        "
+tela4Linha20 : string "                                        "
+tela4Linha21 : string "                                        "
+tela4Linha22 : string "                                        "
+tela4Linha23 : string "                                        "
 tela4Linha24 : string "                                        "
 tela4Linha25 : string "                                        "
 tela4Linha26 : string "                                        "
 tela4Linha27 : string "                                        "
 tela4Linha28 : string "                                        "
 tela4Linha29 : string "                                        "
+
+
+telaFinalVLinha0  : string "                                        "
+telaFinalVLinha1  : string "                                        "
+telaFinalVLinha2  : string "                                        "
+telaFinalVLinha3  : string "                                        "
+telaFinalVLinha4  : string "                                        "
+telaFinalVLinha5  : string "                                        "
+telaFinalVLinha6  : string "               VOCÊ VENCEU              "
+telaFinalVLinha7  : string "                                        "
+telaFinalVLinha8  : string "        AGORA ESTA PRONTO PARA O        "
+telaFinalVLinha9  : string "              ATAQUE ZUMBI              "
+telaFinalVLinha10 : string "           _____                        "
+telaFinalVLinha11 : string "          |     \                       "
+telaFinalVLinha12 : string "          |      \                      "
+telaFinalVLinha13 : string "          |      /        O     __      "
+telaFinalVLinha14 : string "          |_____/        /|\   /  \     "
+telaFinalVLinha15 : string "          |             / | \ | SS |    "
+telaFinalVLinha16 : string "          |               |   | SS |    "
+telaFinalVLinha17 : string "          |              / \   \__/     "
+telaFinalVLinha18 : string "  ________|_____________/___\_________  "
+telaFinalVLinha19 : string "  \                                   / "
+telaFinalVLinha20 : string "   \            SIMÕES               /  "
+telaFinalVLinha21 : string "    \                               /   "
+telaFinalVLinha22 : string "     \____________________________ /    "
+telaFinalVLinha23 : string "                                        "
+telaFinalVLinha24 : string "                                        "
+telaFinalVLinha25 : string "                                        "
+telaFinalVLinha26 : string "                                        "
+telaFinalVLinha27 : string "                                        "
+telaFinalVLinha28 : string "                                        "
+telaFinalVLinha29 : string "                                        "
+
+telaFinalPLinha0  : string "                                        "
+telaFinalPLinha1  : string "                                        "
+telaFinalPLinha2  : string "                                        "
+telaFinalPLinha3  : string "         O TUBARÃO TE PEGOU EM          "
+telaFinalPLinha4  : string "                                        "
+telaFinalPLinha5  : string "                                        "
+telaFinalPLinha6  : string "              GAME OVER                 "
+telaFinalPLinha7  : string "                                        "
+telaFinalPLinha8  : string "        QUER TENTAR NOVAMENTE?<S/N>     "
+telaFinalPLinha9  : string "                                        "
+telaFinalPLinha10 : string "                                        "
+telaFinalPLinha11 : string "                                        "
+telaFinalPLinha12 : string "                                        "
+telaFinalPLinha13 : string "                                        "
+telaFinalPLinha14 : string "        ____                            "
+telaFinalPLinha15 : string "       /X  x\       _____               "
+telaFinalPLinha16 : string "       \ __ /      /    /               "
+telaFinalPLinha17 : string "        \__/      /     \               "
+telaFinalPLinha18 : string "         /|\      |      /              "
+telaFinalPLinha19 : string "        / | \     |      \              "
+telaFinalPLinha20 : string "       /  |  \    |       |             "
+telaFinalPLinha21 : string "          |       |       |             "
+telaFinalPLinha22 : string "         / \      |       |             "
+telaFinalPLinha23 : string "        /   \     |       |             "
+telaFinalPLinha24 : string "       /     \     \______/             "
+telaFinalPLinha25 : string "                                        "
+telaFinalPLinha26 : string "                                        "
+telaFinalPLinha27 : string "                                        "
+telaFinalPLinha28 : string "                                        "
+telaFinalPLinha29 : string "                                        "
