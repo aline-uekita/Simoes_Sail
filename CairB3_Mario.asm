@@ -81,8 +81,12 @@ main:
         loadn r2, #0	
 
         Loop:
+            loadn r1, #2
+            mod r1, r0, r1
+            cmp r1, r2
+            ceq MoveMario
 
-            call MoveMario
+            call Suicidou
 
             loadn r7, #0 ;r7 vai ser meio que um parâmetro
             store parametroBarril, r7
@@ -411,6 +415,81 @@ Venceu:
         pop r0 ;desempilha tudo, não vai ter o rts, vai direto no main
 
         jmp Restart
+
+;--------------------------------------------
+;                 Suicidou
+;--------------------------------------------
+Suicidou:
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+
+    load r0, posAntMario
+    loadn r1, #0 ;contador
+    loadn r2, #5 ;limite do contador
+    loadn r3, #posAntBarril ;endereço da posAntBarril[0]
+    LoopConfere:
+        add r3, r3, r1 ;endereço do posAntBarril[contador] (podia fazer só o inc r3 também)
+        loadi r4, r3   ;para ver qual a posAntBarril[contador]
+
+        cmp r4, r0 ;compara posAntBarril x posAntMario
+        jeq Suicidio
+
+        inc r1
+
+        cmp r1, r2 ;vê se já checou todos os barris
+        jne LoopConfere 
+
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    pop r0
+    rts
+
+    Suicidio:
+        call ApagaTela
+
+        loadn r1, #tela4Linha0	    ;endereco onde comeca a primeira linha do cenario
+        loadn r2, #30720  			;cor roxa
+        call ImprimeTela
+
+        loadn r2, #0 ;inicializa o contador com 0 
+
+        loadn r0, #'s'
+        loadn r3, #'n'
+
+        LoopSuicidio:
+            inchar r1 ;lê o que a pessoa escreveu
+        
+            inc r2    ;contador++
+        
+            cmp r1, r3 ;se ele digitou 'n'
+            jeq fim
+
+            cmp r1, r0 ;se ele digitou 's'
+            jeq SimS
+
+            jmp LoopSuicidio ;se ele não digitou/digitou outra coisa
+
+        SimS:
+            ;gera o randômico sempre para o barril 0 -> mais rápido
+            loadn r5, #6 ;tamanho da tabela de randômicos
+            mod r3, r2, r5 ;deixo o valor entre 0 e 5
+
+            loadn r0, #IncRandBarril ;endereço do índice do barril[0]
+            storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
+
+            pop r3
+            pop r2
+            pop r1
+            pop r0
+
+            pop r0 ;desempilha tudo, não vai ter o rts, vai direto no main
+
+            jmp Restart
 
 ;--------------------------------------------
 ;            Desenha e Apaga Mario 
