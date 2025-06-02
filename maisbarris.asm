@@ -41,46 +41,46 @@ IncRandBarril: var #10
     static IncRandBarril + #9, #0 ;inicializa no 0
 
 RandBarril: var #40
-    static RandBarril + #0, #267
-    static RandBarril + #1, #245
-    static RandBarril + #2, #253
-    static RandBarril + #3, #273
-    static RandBarril + #4, #251
-    static RandBarril + #5, #264
-    static RandBarril + #6, #269
-    static RandBarril + #7, #277
-    static RandBarril + #8, #248
-    static RandBarril + #9, #241
-    static RandBarril + #10, #246
-    static RandBarril + #11, #258
-    static RandBarril + #12, #274
-    static RandBarril + #13, #255
-    static RandBarril + #14, #259
-    static RandBarril + #15, #244
-    static RandBarril + #16, #262
-    static RandBarril + #17, #249
-    static RandBarril + #18, #260
-    static RandBarril + #19, #243
-    static RandBarril + #20, #272
-    static RandBarril + #21, #275
-    static RandBarril + #22, #278
-    static RandBarril + #23, #266
-    static RandBarril + #24, #256
-    static RandBarril + #25, #261
-    static RandBarril + #26, #257
-    static RandBarril + #27, #268
-    static RandBarril + #28, #279
-    static RandBarril + #29, #270
-    static RandBarril + #30, #250
-    static RandBarril + #31, #247
-    static RandBarril + #32, #263
-    static RandBarril + #33, #242
-    static RandBarril + #34, #276
-    static RandBarril + #35, #252
-    static RandBarril + #36, #265
-    static RandBarril + #37, #254
-    static RandBarril + #38, #240
-    static RandBarril + #39, #271
+    static RandBarril + #0, #27
+    static RandBarril + #1, #5
+    static RandBarril + #2, #13
+    static RandBarril + #3, #33
+    static RandBarril + #4, #11
+    static RandBarril + #5, #24
+    static RandBarril + #6, #29
+    static RandBarril + #7, #37
+    static RandBarril + #8, #8
+    static RandBarril + #9, #1
+    static RandBarril + #10, #6
+    static RandBarril + #11, #18
+    static RandBarril + #12, #34
+    static RandBarril + #13, #15
+    static RandBarril + #14, #19
+    static RandBarril + #15, #4
+    static RandBarril + #16, #22
+    static RandBarril + #17, #9
+    static RandBarril + #18, #20
+    static RandBarril + #19, #3
+    static RandBarril + #20, #32
+    static RandBarril + #21, #35
+    static RandBarril + #22, #38
+    static RandBarril + #23, #26
+    static RandBarril + #24, #16
+    static RandBarril + #25, #21
+    static RandBarril + #26, #17
+    static RandBarril + #27, #28
+    static RandBarril + #28, #39
+    static RandBarril + #29, #30
+    static RandBarril + #30, #10
+    static RandBarril + #31, #7
+    static RandBarril + #32, #23
+    static RandBarril + #33, #2
+    static RandBarril + #34, #36
+    static RandBarril + #35, #12
+    static RandBarril + #36, #25
+    static RandBarril + #37, #14
+    static RandBarril + #38, #0
+    static RandBarril + #39, #31
 
 FlagColuna: var #40 ;inicializa no zero == flag desligada
 
@@ -227,7 +227,7 @@ Inicializacao:
     push r3
 
     loadn r0, #FlagCaindo ;sempre é endereço, não flag
-    loadn r2, #10 ;número de flags (como são de 0 - 4, se o r3 == 5, passou do número de flags existentes)
+    loadn r2, #10 ;número de flags (como são de 0 - 9, se o r3 == 10, passou do número de flags existentes)
     loadn r1, #0 ;vai ser o 0 que zera as flags
     store posAntMario, r1
     loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
@@ -242,7 +242,7 @@ Inicializacao:
         
     loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
     loadn r0, #FlagColuna
-    loadn r2, #40 ;número de flags (como são de 0 - 5, se o r3 == 6, passou do número de flags existentes)
+    loadn r2, #40 ;número de flags (como são de 0 - 39, se o r3 == 40, passou do número de flags existentes)
     LoopFlagColuna0:
         storei r0, r1 ;endereço da flag recebe 0
 
@@ -485,11 +485,11 @@ Venceu:
 
     Sim:
         ;gera o randômico sempre para o barril 0 -> mais rápido
-		loadn r5, #6 ;tamanho da tabela de randômicos
-		mod r3, r2, r5 ;deixo o valor entre 0 e 5
+		loadn r5, #40 ;tamanho da tabela de randômicos
+		mod r3, r2, r5 ;deixo o valor entre 0 e 39
 
 		loadn r0, #IncRandBarril ;endereço do índice do barril[0]
-		storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
+		storei r0, r3 ;guardo o valor aleatório entre 0 e 39, no índice do barril 0
 
         pop r3
         pop r2
@@ -536,7 +536,7 @@ Suicidou:
     Suicidio:
         call ApagaTela
 
-        loadn r1, #tela4Linha0	    ;endereco onde comeca a primeira linha do cenario
+        loadn r1, #telaFinalPLinha0    ;endereco onde comeca a primeira linha do cenario
         loadn r2, #30720  			;cor roxa
         call ImprimeTela
 
@@ -560,11 +560,11 @@ Suicidou:
 
         SimS:
             ;gera o randômico sempre para o barril 0 -> mais rápido
-            loadn r5, #41 ;tamanho da tabela de randômicos
-            mod r3, r2, r5 ;deixo o valor entre 0 e 5
+            loadn r5, #40 ;tamanho da tabela de randômicos
+            mod r3, r2, r5 ;deixo o valor entre 0 e 39
 
             loadn r0, #IncRandBarril ;endereço do índice do barril[0]
-            storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
+            storei r0, r3 ;guardo o valor aleatório entre 0 e 39, no índice do barril 0
 
             pop r3
             pop r2
@@ -586,7 +586,7 @@ DesenhaMario:
     loadn r1, ':'
     outchar r1, r0
 
-    store posAntMario, R0 ;Se o mario anda, a posAntMario é atualizada quando é desenhado
+    store posAntMario, r0 ;Se o mario anda, a posAntMario é atualizada quando é desenhado
 
     pop r1
     pop r0
@@ -638,7 +638,7 @@ PosicaoInicialBarril:
     push r3
     push r4
 
-    load r0, parametroBarril   ;vê qual barril que está caindo [0 a 4]
+    load r0, parametroBarril   ;vê qual barril que está caindo [0 a 9]
     loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
     add r3, r3, r0             ;r3 = endereço da FlagCaindo[parametroBarril]
     loadi r2, r3               ;r2 = valor da FlagCaindo[parametroBarril] 
@@ -795,7 +795,7 @@ LigarFlag:
     loadn r0, #IncRandBarril
     load r1, parametroBarril
     add r0, r0, r1
-    loadi r2, r0 ;valor do índice(0 a 5) do IncRandBarril[parametroBarril]
+    loadi r2, r0 ;valor do índice(0 a 39) do IncRandBarril[parametroBarril]
 
     loadn r1, #FlagColuna
     add r1, r1, r2 ;Endereço FlagColuna[IncRandBarril[parametroBarril]]
@@ -856,8 +856,8 @@ Morreu:
 
     call ApagaTela
 
-    loadn r1, #tela4Linha0	    ;endereco onde comeca a primeira linha do cenario
-	loadn r2, #30720  			;cor roxa
+    loadn r1, #telaFinalPLinha0	    ;endereco onde comeca a primeira linha do cenario
+	loadn r2, #30720  			    ;cor roxa
 	call ImprimeTela
 
 	loadn r2, #0 ;inicializa o contador com 0 
@@ -909,7 +909,7 @@ DesenhaBarril:
     add r0, r1, r0 ;r0 = endereço do posBarril[parametroBarril]
     loadi r2, r0 ;r2 = valor do posBarril[parametroBarril]
 
-    loadn r3, #'O'
+    loadn r3, #'t'
     outchar r3, r2
 
     ;Atualiza o posAntBarril
@@ -1095,8 +1095,8 @@ ImprimeStr2:
 	push r2	
 	push r3	
 	push r4
-	push r5	; protege o r5 na pilha para ser usado na subrotina
-	push r6	; protege o r6 na pilha para ser usado na subrotina
+	push r5	
+	push r6	
 	
 	
 	loadn r3, #'\0'	; Criterio de parada
@@ -1119,7 +1119,7 @@ ImprimeStr2:
 		jmp ImprimeStr2_Loop
 	
    ImprimeStr2_Sai:	
-	pop r6	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r6	
 	pop r5
 	pop r4
 	pop r3
@@ -1135,7 +1135,7 @@ ApagaTela:
 	push r1
 	
 	loadn r0, #1200		; apaga as 1200 posicoes da Tela
-	loadn r1, #' '		; com "espaco"
+	loadn r1, #' '		; com "espaço"
 	
 	   ApagaTela_Loop:	;;label for(r0=1200;r3>0;r3--)
 		dec r0
@@ -1181,11 +1181,11 @@ tela0Linha27 : string "                                        "
 tela0Linha28 : string "                                        "
 tela0Linha29 : string "                                        "	
 
-;Tela 01: Chão
+;Tela 01: Chão + barco
 tela1Linha0  : string "                                        "
 tela1Linha1  : string "                                        "
 tela1Linha2  : string "                                        "
-tela1Linha3  : string "                                        "
+tela1Linha3  : string "              ()                        "
 tela1Linha4  : string "          ================              "
 tela1Linha5  : string "                                        "
 tela1Linha6  : string "                                        "
@@ -1281,28 +1281,28 @@ tela3Linha29 : string "                                        "
 ;Tela menu:
 tela4Linha0  : string "                                        "
 tela4Linha1  : string "                                        "
-tela4Linha2  : string "    PRESSIONE ENTER PARA INICIAR        "
-tela4Linha3  : string "    E RECUPERAR O BARCO DO SIMOES       "
+tela4Linha2  : string "                                        "
+tela4Linha3  : string "                                        "
 tela4Linha4  : string "                                        "
-tela4Linha5  : string "                                        "
-tela4Linha6  : string "                                        "
-tela4Linha7  : string "               BBBBBBBB                 "
-tela4Linha8  : string "              BBBBBBBBBB                "
-tela4Linha9  : string "           BBBBBBBBBBBBBBBB             "
-tela4Linha10 : string "          BBBBBBBBBBBBBBBBBB            "
-tela4Linha11 : string "          BBBB   SIMOES   BBB           "
-tela4Linha12 : string "          BBBBBBBBBBBBBBBBBB            "
-tela4Linha13 : string "           BBBBBBBBBBBBBBBB             "
-tela4Linha14 : string "              BBBBBBBBBB                "
-tela4Linha15 : string "                                        "
-tela4Linha16 : string "                                        "
-tela4Linha17 : string "                                        "
-tela4Linha18 : string "                                        "
-tela4Linha19 : string "                  __                    "
-tela4Linha20 : string "                 y  l                   "
-tela4Linha21 : string "                y____l                  "
-tela4Linha22 : string "                l    y                  "
-tela4Linha23 : string "                 l__y                   "
+tela4Linha5  : string "       PRESSIONE ENTER PARA INICIAR     "     
+tela4Linha6  : string "      E RECUPERAR O BARCO DO SIMOES     "
+tela4Linha7  : string "                                        "
+tela4Linha8  : string "                   ____                 "
+tela4Linha9  : string "                  y || l                "
+tela4Linha10 : string "                 y  ||  l               "
+tela4Linha11 : string "                y   ||   l              "
+tela4Linha12 : string "               y    ||    l             "
+tela4Linha13 : string "               l    ||    y             "
+tela4Linha14 : string "                l   ||   y              "
+tela4Linha15 : string "                 l  ||  y               "
+tela4Linha16 : string "                  l || y                "
+tela4Linha17 : string "                   l||y                 "
+tela4Linha18 : string "         ___________||__________        "
+tela4Linha19 : string "         l                     y        "
+tela4Linha20 : string "          l       SIMOES      y         "
+tela4Linha21 : string "           l_________________y          "
+tela4Linha22 : string "                                        "
+tela4Linha23 : string "                                        "
 tela4Linha24 : string "                                        "
 tela4Linha25 : string "                                        "
 tela4Linha26 : string "                                        "
@@ -1341,3 +1341,35 @@ tela5Linha26 : string "                                        "
 tela5Linha27 : string "                                        "
 tela5Linha28 : string "                                        "
 tela5Linha29 : string "                                        "
+
+;Tela Perdeu
+telaFinalPLinha0  : string "                                        "
+telaFinalPLinha1  : string "                                        "
+telaFinalPLinha2  : string "                                        "
+telaFinalPLinha3  : string "         O TUBARAO TE PEGOU EM          "
+telaFinalPLinha4  : string "                                        "
+telaFinalPLinha5  : string "                                        "
+telaFinalPLinha6  : string "              GAME OVER                 "
+telaFinalPLinha7  : string "                                        "
+telaFinalPLinha8  : string "       QUER TENTAR NOVAMENTE? <s/n>     "
+telaFinalPLinha9  : string "                                        "
+telaFinalPLinha10 : string "                                        "
+telaFinalPLinha11 : string "                                        "
+telaFinalPLinha12 : string "                                        "
+telaFinalPLinha13 : string "                                        "
+telaFinalPLinha14 : string "        ____                            "
+telaFinalPLinha15 : string "       yX  xl       _____               "
+telaFinalPLinha16 : string "       l __ y      y    y               "
+telaFinalPLinha17 : string "        l__y      y     l               "
+telaFinalPLinha18 : string "         y|l      |      y              "
+telaFinalPLinha19 : string "        y | l     |      l              "
+telaFinalPLinha20 : string "       y  |  l    |       |             "
+telaFinalPLinha21 : string "          |       |       |             "
+telaFinalPLinha22 : string "         y l      |       |             "
+telaFinalPLinha23 : string "        y   l     |       |             "
+telaFinalPLinha24 : string "       y     l     l______y             "
+telaFinalPLinha25 : string "                                        "
+telaFinalPLinha26 : string "                                        "
+telaFinalPLinha27 : string "                                        "
+telaFinalPLinha28 : string "                                        "
+telaFinalPLinha29 : string "                                        "
