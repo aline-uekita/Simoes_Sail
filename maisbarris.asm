@@ -1,130 +1,130 @@
 jmp main
-;barril
-posBarril: var #10
-    static posBarril + #0, #0 ;inicializa no 0
-    static posBarril + #1, #0 ;inicializa no 0
-    static posBarril + #2, #0 ;inicializa no 0
-    static posBarril + #3, #0 ;inicializa no 0
-    static posBarril + #4, #0 ;inicializa no 0
-    static posBarril + #5, #0 ;inicializa no 0
-    static posBarril + #6, #0 ;inicializa no 0
-    static posBarril + #7, #0 ;inicializa no 0
-    static posBarril + #8, #0 ;inicializa no 0
-    static posBarril + #9, #0 ;inicializa no 0
+;Tubarao
+posTubarao: var #10
+    static posTubarao + #0, #0 ;inicializa no 0
+    static posTubarao + #1, #0 ;inicializa no 0
+    static posTubarao + #2, #0 ;inicializa no 0
+    static posTubarao + #3, #0 ;inicializa no 0
+    static posTubarao + #4, #0 ;inicializa no 0
+    static posTubarao + #5, #0 ;inicializa no 0
+    static posTubarao + #6, #0 ;inicializa no 0
+    static posTubarao + #7, #0 ;inicializa no 0
+    static posTubarao + #8, #0 ;inicializa no 0
+    static posTubarao + #9, #0 ;inicializa no 0
 
-posAntBarril: var #10
-    static posAntBarril + #0, #0 ;inicializa no 0
-    static posAntBarril + #1, #0 ;inicializa no 0
-    static posAntBarril + #2, #0 ;inicializa no 0
-    static posAntBarril + #3, #0 ;inicializa no 0
-    static posAntBarril + #4, #0 ;inicializa no 0
-    static posAntBarril + #5, #0 ;inicializa no 0
-    static posAntBarril + #6, #0 ;inicializa no 0
-    static posAntBarril + #7, #0 ;inicializa no 0
-    static posAntBarril + #8, #0 ;inicializa no 0
-    static posAntBarril + #9, #0 ;inicializa no 0
+posAntTubarao: var #10
+    static posAntTubarao + #0, #0 ;inicializa no 0
+    static posAntTubarao + #1, #0 ;inicializa no 0
+    static posAntTubarao + #2, #0 ;inicializa no 0
+    static posAntTubarao + #3, #0 ;inicializa no 0
+    static posAntTubarao + #4, #0 ;inicializa no 0
+    static posAntTubarao + #5, #0 ;inicializa no 0
+    static posAntTubarao + #6, #0 ;inicializa no 0
+    static posAntTubarao + #7, #0 ;inicializa no 0
+    static posAntTubarao + #8, #0 ;inicializa no 0
+    static posAntTubarao + #9, #0 ;inicializa no 0
 
 FlagCaindo: var #10
 
-parametroBarril: var #1 ;Para saber qual Barril está caindo
+parametroTubarao: var #1 ;Para saber qual Tubarao está caindo
 
-IncRandBarril: var #10
-    static IncRandBarril + #0, #0 ;inicializa no 0
-    static IncRandBarril + #1, #0 ;inicializa no 0
-    static IncRandBarril + #2, #0 ;inicializa no 0
-    static IncRandBarril + #3, #0 ;inicializa no 0
-    static IncRandBarril + #4, #0 ;inicializa no 0
-    static IncRandBarril + #5, #0 ;inicializa no 0
-    static IncRandBarril + #6, #0 ;inicializa no 0
-    static IncRandBarril + #7, #0 ;inicializa no 0
-    static IncRandBarril + #8, #0 ;inicializa no 0
-    static IncRandBarril + #9, #0 ;inicializa no 0
+IncRandTubarao: var #10
+    static IncRandTubarao + #0, #0 ;inicializa no 0
+    static IncRandTubarao + #1, #0 ;inicializa no 0
+    static IncRandTubarao + #2, #0 ;inicializa no 0
+    static IncRandTubarao + #3, #0 ;inicializa no 0
+    static IncRandTubarao + #4, #0 ;inicializa no 0
+    static IncRandTubarao + #5, #0 ;inicializa no 0
+    static IncRandTubarao + #6, #0 ;inicializa no 0
+    static IncRandTubarao + #7, #0 ;inicializa no 0
+    static IncRandTubarao + #8, #0 ;inicializa no 0
+    static IncRandTubarao + #9, #0 ;inicializa no 0
 
-RandBarril: var #40
-    static RandBarril + #0, #27
-    static RandBarril + #1, #5
-    static RandBarril + #2, #13
-    static RandBarril + #3, #33
-    static RandBarril + #4, #11
-    static RandBarril + #5, #24
-    static RandBarril + #6, #29
-    static RandBarril + #7, #37
-    static RandBarril + #8, #8
-    static RandBarril + #9, #1
-    static RandBarril + #10, #6
-    static RandBarril + #11, #18
-    static RandBarril + #12, #34
-    static RandBarril + #13, #15
-    static RandBarril + #14, #19
-    static RandBarril + #15, #4
-    static RandBarril + #16, #22
-    static RandBarril + #17, #9
-    static RandBarril + #18, #20
-    static RandBarril + #19, #3
-    static RandBarril + #20, #32
-    static RandBarril + #21, #35
-    static RandBarril + #22, #38
-    static RandBarril + #23, #26
-    static RandBarril + #24, #16
-    static RandBarril + #25, #21
-    static RandBarril + #26, #17
-    static RandBarril + #27, #28
-    static RandBarril + #28, #39
-    static RandBarril + #29, #30
-    static RandBarril + #30, #10
-    static RandBarril + #31, #7
-    static RandBarril + #32, #23
-    static RandBarril + #33, #2
-    static RandBarril + #34, #36
-    static RandBarril + #35, #12
-    static RandBarril + #36, #25
-    static RandBarril + #37, #14
-    static RandBarril + #38, #0
-    static RandBarril + #39, #31
+RandTubarao: var #40
+    static RandTubarao + #0, #27
+    static RandTubarao + #1, #5
+    static RandTubarao + #2, #13
+    static RandTubarao + #3, #33
+    static RandTubarao + #4, #11
+    static RandTubarao + #5, #24
+    static RandTubarao + #6, #29
+    static RandTubarao + #7, #37
+    static RandTubarao + #8, #8
+    static RandTubarao + #9, #1
+    static RandTubarao + #10, #6
+    static RandTubarao + #11, #18
+    static RandTubarao + #12, #34
+    static RandTubarao + #13, #15
+    static RandTubarao + #14, #19
+    static RandTubarao + #15, #4
+    static RandTubarao + #16, #22
+    static RandTubarao + #17, #9
+    static RandTubarao + #18, #20
+    static RandTubarao + #19, #3
+    static RandTubarao + #20, #32
+    static RandTubarao + #21, #35
+    static RandTubarao + #22, #38
+    static RandTubarao + #23, #26
+    static RandTubarao + #24, #16
+    static RandTubarao + #25, #21
+    static RandTubarao + #26, #17
+    static RandTubarao + #27, #28
+    static RandTubarao + #28, #39
+    static RandTubarao + #29, #30
+    static RandTubarao + #30, #10
+    static RandTubarao + #31, #7
+    static RandTubarao + #32, #23
+    static RandTubarao + #33, #2
+    static RandTubarao + #34, #36
+    static RandTubarao + #35, #12
+    static RandTubarao + #36, #25
+    static RandTubarao + #37, #14
+    static RandTubarao + #38, #0
+    static RandTubarao + #39, #31
 
 FlagColuna: var #40 ;inicializa no zero == flag desligada
 
-posMario: var #1
-posAntMario: var #1
+posSimoes: var #1
+posAntSimoes: var #1
 
 ;Codigo principal
 main:
-	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #30720  			; cor branca!
+	loadn r1, #tela4Linha0	    ;Endereco onde comeca a primeira linha do cenario
+	loadn r2, #30720  	   ;cor cinza
 	call ImprimeTela
 
-	loadn r2, #0 ;inicializa o contador com 0 
+	loadn r2, #0                ;inicializa o contador com 0 
 
 	Loopmenu:
 		inchar r4
-		loadn r1, #13 ;tecla enter
+		loadn r1, #13           ;tecla enter
 		
-		inc r2 ;faz a soma aleatória para dar o rand
+		inc r2                  ;faz a soma aleatória para dar o rand
 
 		cmp r4, r1
 		jne Loopmenu
 
-		loadn r5, #6
+		loadn r5, #40           ;limita o valor para ficar entre 0 e 39
 		mod r3, r2, r5
 
-		loadn r0, #IncRandBarril
-		storei r0, r3
+		loadn r0, #IncRandTubarao
+		storei r0, r3           ;guardo esse valor aleatório no IncRandTubarao[0]
 
     Restart:
         call Inicializacao
 
         call ApagaTela
-        loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #25600  			; cor branca!
-        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+        loadn R1, #tela1Linha0	    ;Endereco onde comeca a primeira linha do cenario!!
+        loadn R2, #25600  			;cor azul -> onda
+        call ImprimeTela2   		;Rotina de Impresao de Cenario na Tela Inteira
         
-        loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-        loadn R2, #10240  ;COR DA Onda
-        call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+        loadn R1, #tela2Linha0	    ;Endereco onde comeca a primeira linha do cenario!!
+        loadn R2, #10240            ;cor roxa -> correnteza
+        call ImprimeTela2   	    ;Rotina de Impresao de Cenario na Tela Inteira
         
         loadn r0, #1119
-        store posMario, r0 ;mario começa na linha 27, coluna 39
-        call DesenhaMario
+        store posSimoes, r0         ;Simoes começa na linha 27, coluna 39
+        call DesenhaSimoes
 
         loadn r0, #0	
         loadn r2, #0	
@@ -133,81 +133,81 @@ main:
             loadn r1, #2
             mod r1, r0, r1
             cmp r1, r2
-            ceq MoveMario
+            ceq MoveSimoes
 
-            loadn r7, #0 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #2 ;Começa quando for um múltiplo de 2
+            loadn r7, #0    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #2    ;Começa quando for um múltiplo de 2
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
-            loadn r7, #1 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #3 ;Começa quando for um múltiplo de 3
+            loadn r7, #1    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #3    ;Começa quando for um múltiplo de 3
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
             
-            loadn r7, #2 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #4 ;Começa quando for um múltiplo de 4
+            loadn r7, #2    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #4    ;Começa quando for um múltiplo de 4
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
             
-            loadn r7, #3 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #5 ;Começa quando for um múltiplo de 5
+            loadn r7, #3    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #5    ;Começa quando for um múltiplo de 5
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
-            loadn r7, #4 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #6 ;Começa quando for um múltiplo de 6
+            loadn r7, #4    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #6    ;Começa quando for um múltiplo de 6
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
-            loadn r7, #5 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #2 ;Começa quando for um múltiplo de 2
+            loadn r7, #5    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #2    ;Começa quando for um múltiplo de 2
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
-            loadn r7, #6 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #3 ;Começa quando for um múltiplo de 3
+            loadn r7, #6    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #3    ;Começa quando for um múltiplo de 3
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
             
-            loadn r7, #7 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #4 ;Começa quando for um múltiplo de 4
+            loadn r7, #7    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #4    ;Começa quando for um múltiplo de 4
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
             
-            loadn r7, #8 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #5 ;Começa quando for um múltiplo de 5
+            loadn r7, #8    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #5    ;Começa quando for um múltiplo de 5
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
-            loadn r7, #9 ;r7 vai ser meio que um parâmetro
-            store parametroBarril, r7
-            loadn r1, #6 ;Começa quando for um múltiplo de 6
+            loadn r7, #9    ;r7 vai ser meio que um parâmetro
+            store parametroTubarao, r7
+            loadn r1, #6    ;Começa quando for um múltiplo de 6
             mod r1, r0, r1
             cmp r1, r2 
-            ceq MoveBarril
+            ceq MoveTubarao
 
             call Delay
 
-            inc r0 	;contador++
+            inc r0 	        ;contador++
             
             jmp Loop
 	
@@ -226,28 +226,28 @@ Inicializacao:
     push r2
     push r3
 
-    loadn r0, #FlagCaindo ;sempre é endereço, não flag
-    loadn r2, #10 ;número de flags (como são de 0 - 9, se o r3 == 10, passou do número de flags existentes)
-    loadn r1, #0 ;vai ser o 0 que zera as flags
-    store posAntMario, r1
-    loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
+    loadn r0, #FlagCaindo       ;sempre é endereço, não flag
+    loadn r2, #10               ;número de flags (como são de 0 - 4, se o r3 == 5, passou do número de flags existentes)
+    loadn r1, #0                ;vai ser o 0 que zera as flags
+    store posAntSimoes, r1
+    loadn r3, #0                ;contador para não passar o número de flags -> qual flag que é
     LoopFlagCaindo0:
-        storei r0, r1 ;endereço da flag recebe 0
+        storei r0, r1           ;endereço da flag recebe 0
 
-        inc r0 ;vai para o próximo endereço da flag
-        inc r3 ;vai para a próxima flag 
+        inc r0      ;vai para o próximo endereço da flag
+        inc r3      ;vai para a próxima flag 
 
         cmp r3, r2
         jne LoopFlagCaindo0
         
-    loadn r3, #0 ;contador para não passar o número de flags -> qual flag que é
+    loadn r3, #0                ;contador para não passar o número de flags -> qual flag que é
     loadn r0, #FlagColuna
-    loadn r2, #40 ;número de flags (como são de 0 - 39, se o r3 == 40, passou do número de flags existentes)
+    loadn r2, #40               ;número de flags (como são de 0 - 5, se o r3 == 6, passou do número de flags existentes)
     LoopFlagColuna0:
-        storei r0, r1 ;endereço da flag recebe 0
+        storei r0, r1           ;endereço da flag recebe 0
 
-        inc r0 ;vai para o próximo endereço da flag
-        inc r3 ;vai para a próxima flag 
+        inc r0      ;vai para o próximo endereço da flag
+        inc r3      ;vai para a próxima flag 
 
         cmp r3, r2
         jne LoopFlagColuna0
@@ -259,40 +259,40 @@ Inicializacao:
     rts
 
 ;--------------------------------------------
-;               MoveMario
+;               MoveSimoes
 ;--------------------------------------------	
-MoveMario:
+MoveSimoes:
     push r0
     push r1
     push r2
 
-    load r0, posAntMario
-    loadn r2, #135 ;linha 3 coluna 15
+    load r0, posAntSimoes
+    loadn r2, #135                      ;linha 3 coluna 15
     cmp r0, r2
     ceq Venceu
 
     call Suicidou
 
-	call MoveMario_RecalculaPos		;Recalcula Posicao do Mario
+	call MoveSimoes_RecalculaPos		;Recalcula Posicao do Simoes
 
-    ;Só apaga e Redesenha se (pos != posAnt) não precisava, mas deixa minimamente mais rápido
-	load r0, posMario
-	load r1, posAntMario
+    ;Só apaga e Redesenha se (pos != posAnt), para não ficar piscando o Simões
+	load r0, posSimoes
+	load r1, posAntSimoes
 	cmp r0, r1
-	jeq RtsMoveMario
+	jeq RtsMoveSimoes
 	
-	;Se Próxima instrucao do mario for o chao ou parede, nao move
-	call ApagaMario
-	call DesenhaMario	
+	;Se Próxima instrucao do Simoes for o chao ou parede, não move
+	call ApagaSimoes
+	call DesenhaSimoes	
 
-    RtsMoveMario:
+    RtsMoveSimoes:
 	
         pop r2
         pop r1
         pop r0
         rts
 
-MoveMario_RecalculaPos:
+MoveSimoes_RecalculaPos:
     push r0
     push r1
     push r2
@@ -301,30 +301,36 @@ MoveMario_RecalculaPos:
     push r5
     push r6
 
-    load r0, posMario
+    load r0, posSimoes
 
     inchar r1 ;lê o teclado
 
+    ;Switch - Case
+
+    ;Case 1
     loadn r2, #'a'
     cmp r1, r2
-    jeq MoveMario_RecalculaPos_A
+    jeq MoveSimoes_RecalculaPos_A
 
+    ;Case 2
     loadn r2, #'d'
     cmp r1, r2
-    jeq MoveMario_RecalculaPos_D
+    jeq MoveSimoes_RecalculaPos_D
 
+    ;Case 3
     loadn r2, #'w'
     cmp r1, r2
-    jeq MoveMario_RecalculaPos_W
+    jeq MoveSimoes_RecalculaPos_W
 
+    ;Case 4
     loadn r2, #'s'
     cmp r1, r2
-    jeq MoveMario_RecalculaPos_S
+    jeq MoveSimoes_RecalculaPos_S
 
-    StoreposMario:
-        store posMario, r0
+    StoreposSimoes:
+        store posSimoes, r0
 
-    RtsMoveMario_RecalculaPos:
+    RtsMoveSimoes_RecalculaPos:
         pop r6
         pop r5
         pop r4
@@ -334,22 +340,22 @@ MoveMario_RecalculaPos:
         pop r0
         rts
 
-    ;Move para a esquerda
-    MoveMario_RecalculaPos_A:
+    ;Move para a esquerda 
+    MoveSimoes_RecalculaPos_A:
         ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
-        mod r1, r0, r1      ;coluna posMario atual
+        mod r1, r0, r1      ;coluna posSimoes atual
         cmp r1, r2          ;Se ele já tiver na coluna 0, não tem mais o que andar
-        jeq RtsMoveMario_RecalculaPos  
+        jeq RtsMoveSimoes_RecalculaPos  
 
         ;Verifica se tem chão: 
-            mov r6, r0          ;r0 é fixo para mexer na posMario 
+            mov r6, r0          ;r0 é fixo para mexer na posSimoes 
             loadn r2, #40
             dec r6              ;vai para a esquerda
             add r6, r6, r2      ;vai para linha de baixo
-            div r1, r6, r2      ;linha posMario + 40
-            mod r4, r6, r2      ;coluna posMario + 40
+            div r1, r6, r2      ;linha posSimoes + 40
+            mod r4, r6, r2      ;coluna posSimoes + 40
 
             ;calcula endereço: tela1 + linha*41(40 + '\0') + coluna
             loadn r3, #41
@@ -362,28 +368,28 @@ MoveMario_RecalculaPos:
 
             loadn r5, #'='
             cmp r6, r5
-            jne RtsMoveMario_RecalculaPos  ;se não for chão, rts
+            jne RtsMoveSimoes_RecalculaPos  ;se não for chão, rts
 
         dec r0              ;se tiver chão anda para esquerda
-        jmp StoreposMario
+        jmp StoreposSimoes
 
     ;Move para direita
-    MoveMario_RecalculaPos_D:
+    MoveSimoes_RecalculaPos_D:
         ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
-        mod r1, r0, r1      ;coluna posMario atual
+        mod r1, r0, r1      ;coluna posSimoes atual
         loadn r1, #39       ;se ele está na coluna 39, não tem mais o que andar
         cmp r1, r2
-        jeq RtsMoveMario_RecalculaPos  
+        jeq RtsMoveSimoes_RecalculaPos  
 
         ;Verifica se tem chão
-            mov r6, r0          ;r0 == posMario, reservado
+            mov r6, r0          ;r0 == posSimoes, reservado
             loadn r2, #40
             inc r6              ;vai para a direita
             add r6, r6, r2      ;vai para linha de baixo
-            div r1, r6, r2      ;linha posMario + 1 + 40
-            mod r4, r6, r2      ;coluna posMario + 1 + 40
+            div r1, r6, r2      ;linha posSimoes + 1 + 40
+            mod r4, r6, r2      ;coluna posSimoes + 1 + 40
 
             ;calcula endereço: tela1 + linha*41(40 + '\0') + coluna
             loadn r3, #41
@@ -396,36 +402,36 @@ MoveMario_RecalculaPos:
 
             loadn r5, #'='
             cmp r6, r5
-            jne RtsMoveMario_RecalculaPos  ;se não for chão, não anda
+            jne RtsMoveSimoes_RecalculaPos  ;se não for chão, não anda
 
         inc r0              ;anda para a direita
-        jmp StoreposMario
+        jmp StoreposSimoes
 
 
     ;Move para cima
-    MoveMario_RecalculaPos_W:
+    MoveSimoes_RecalculaPos_W:
         ;calcula o endereço do caractere no mapa da escada
             loadn r2, #40
             loadn r1, #tela3Linha0
-            add r4, r0, r1    ;endereço da tela3Linha0 + posMario
+            add r4, r0, r1    ;endereço da tela3Linha0 + posSimoes
             div r5, r0, r2    ;pos / 40 (quantidade de '\0' anteriores)
-            add r4, r4, r5    ;endereço da tela3Linha0 + posMario + '\0'
+            add r4, r4, r5    ;endereço da tela3Linha0 + posSimoes + '\0'
             loadi r6, r4      ;vê o que tem no mapa
 
             loadn r5, #'n'
             cmp r6, r5
-            jne RtsMoveMario_RecalculaPos ;se não tiver o 'n' -> pode ser qualquer caractere, mas tem que atualizar a tela3
+            jne RtsMoveSimoes_RecalculaPos ;se não tiver o 'n' -> pode ser qualquer caractere, mas tem que atualizar a tela3
 
         sub r0, r0, r2 ;sobe 1 linha
     
-        jmp StoreposMario
+        jmp StoreposSimoes
 
-    MoveMario_RecalculaPos_S:
+    MoveSimoes_RecalculaPos_S:
         loadn r2, #40
-        mov   r6, r0         ;r0 é fixo para a posMario
+        mov   r6, r0         ;r0 é fixo para a posSimoes
         add   r6, r6, r2     ;desce uma linha
-        div   r1, r6, r2     ;linha posMario + 40 
-        mod   r4, r6, r2     ;coluna posMario + 40
+        div   r1, r6, r2     ;linha posSimoes + 40 
+        mod   r4, r6, r2     ;coluna posSimoes + 40
 
         ;Calcula o endereço da posição na tela3 (mapa de escadas)
             loadn r3, #41         ;40 + \0
@@ -439,7 +445,7 @@ MoveMario_RecalculaPos:
 
             loadn r5, #'n'
             cmp   r6, r5
-            jne   RtsMoveMario_RecalculaPos ;se não for 'n', rts
+            jne   RtsMoveSimoes_RecalculaPos ;se não for 'n', rts
 
     ;Desce para a próxima linha
     add   r0, r0, r2
@@ -449,7 +455,7 @@ MoveMario_RecalculaPos:
     call Delay
     call Delay
 
-    jmp   StoreposMario
+    jmp   StoreposSimoes
 
 ;--------------------------------------------
 ;                 Venceu
@@ -466,30 +472,30 @@ Venceu:
 	loadn r2, #30720 		;cor roxa
 	call ImprimeTela
 
-	loadn r2, #0 ;inicializa o contador com 0 
+	loadn r2, #0            ;inicializa o contador com 0 
 
     loadn r0, #'s'
     loadn r3, #'n'
 
     LoopVenceu:
-        inchar r1 ;lê o teclado
-        inc r2 ;contador++ 
+        inchar r1           ;lê o teclado
+        inc r2              ;contador++ 
         
-        cmp r1, r3 ;compara se a pessoa digitou 'n'
+        cmp r1, r3          ;compara se a pessoa digitou 'n'
         jeq fim
 
-        cmp r1, r0  ;compara se a pessoa digitou 's'
+        cmp r1, r0          ;compara se a pessoa digitou 's'
         jeq Sim
 
-        jmp LoopVenceu ;se ela não digitou nada ou digitou algo 'não permitido', volta para o loop
+        jmp LoopVenceu      ;se ela não digitou nada ou digitou algo 'não permitido', volta para o loop
 
     Sim:
-        ;gera o randômico sempre para o barril 0 -> mais rápido
-		loadn r5, #40 ;tamanho da tabela de randômicos
-		mod r3, r2, r5 ;deixo o valor entre 0 e 39
+        ;gera o randômico sempre para o Tubarao 0 -> mais rápido
+		loadn r5, #6        ;tamanho da tabela de randômicos
+		mod r3, r2, r5      ;deixo o valor entre 0 e 5
 
-		loadn r0, #IncRandBarril ;endereço do índice do barril[0]
-		storei r0, r3 ;guardo o valor aleatório entre 0 e 39, no índice do barril 0
+		loadn r0, #IncRandTubarao   ;endereço do índice do Tubarao[0]
+		storei r0, r3               ;guardo o valor aleatório entre 0 e 5, no índice do Tubarao 0
 
         pop r3
         pop r2
@@ -510,20 +516,20 @@ Suicidou:
     push r3
     push r4
 
-    load r0, posAntMario
-    loadn r1, #0 ;contador
-    loadn r2, #40 ;limite do contador
-    loadn r3, #posAntBarril ;endereço da posAntBarril[0]
+    load r0, posAntSimoes
+    loadn r1, #0                ;contador
+    loadn r2, #10               ;limite do contador
+    loadn r3, #posAntTubarao    ;endereço da posAntTubarao[0]
     LoopConfere:
-        add r3, r3, r1 ;endereço do posAntBarril[contador] (podia fazer só o inc r3 também)
-        loadi r4, r3   ;para ver qual a posAntBarril[contador]
+        add r3, r3, r1          ;endereço do posAntTubarao[contador] (podia fazer só o inc r3 também)
+        loadi r4, r3            ;para ver qual a posAntTubarao[contador]
 
-        cmp r4, r0 ;compara posAntBarril x posAntMario
+        cmp r4, r0              ;compara posAntTubarao x posAntSimoes
         jeq Suicidio
 
         inc r1
 
-        cmp r1, r2 ;vê se já checou todos os barris
+        cmp r1, r2              ;vê se já checou todos os tubarões
         jne LoopConfere 
 
     pop r4
@@ -537,34 +543,34 @@ Suicidou:
         call ApagaTela
 
         loadn r1, #telaFinalPLinha0    ;endereco onde comeca a primeira linha do cenario
-        loadn r2, #30720  			;cor roxa
+        loadn r2, #30720  			   ;cor roxa
         call ImprimeTela
 
-        loadn r2, #0 ;inicializa o contador com 0 
+        loadn r2, #0                   ;inicializa o contador com 0 
 
         loadn r0, #'s'
         loadn r3, #'n'
 
         LoopSuicidio:
-            inchar r1 ;lê o que a pessoa escreveu
+            inchar r1                  ;lê o que a pessoa escreveu
         
-            inc r2    ;contador++
+            inc r2                     ;contador++
         
-            cmp r1, r3 ;se ele digitou 'n'
+            cmp r1, r3      ;se ele digitou 'n'
             jeq fim
 
-            cmp r1, r0 ;se ele digitou 's'
+            cmp r1, r0      ;se ele digitou 's'
             jeq SimS
 
-            jmp LoopSuicidio ;se ele não digitou/digitou outra coisa
+            jmp LoopSuicidio           ;se ele não digitou/digitou outra coisa
 
         SimS:
-            ;gera o randômico sempre para o barril 0 -> mais rápido
-            loadn r5, #40 ;tamanho da tabela de randômicos
-            mod r3, r2, r5 ;deixo o valor entre 0 e 39
+            ;gera o randômico sempre para o Tubarao 0 -> mais rápido
+            loadn r5, #40       ;tamanho da tabela de randômicos
+            mod r3, r2, r5      ;deixo o valor entre 0 e 39
 
-            loadn r0, #IncRandBarril ;endereço do índice do barril[0]
-            storei r0, r3 ;guardo o valor aleatório entre 0 e 39, no índice do barril 0
+            loadn r0, #IncRandTubarao   ;endereço do índice do Tubarao[0]
+            storei r0, r3               ;guardo o valor aleatório entre 0 e 5, no índice do Tubarao 0
 
             pop r3
             pop r2
@@ -576,23 +582,28 @@ Suicidou:
             jmp Restart
 
 ;--------------------------------------------
-;            Desenha e Apaga Mario 
+;            Desenha e Apaga Simoes 
 ;--------------------------------------------
-DesenhaMario:
+DesenhaSimoes:
     push r0
     push r1
+    push r2
 
-    load r0, posMario
-    loadn r1, ':'
+    load r0, posSimoes
+    loadn r2, #2048             ;cor rosa -> Simões
+    loadn r1, ':'               ;caractere do Simões
+    add r1, r1, r2              ;Simões + cor 
+
     outchar r1, r0
 
-    store posAntMario, r0 ;Se o mario anda, a posAntMario é atualizada quando é desenhado
+    store posAntSimoes, r0 ;Se o Simoes anda, a posAntSimoes é atualizada quando é desenhado
 
+    pop r2
     pop r1
     pop r0
     rts
 
-ApagaMario:
+ApagaSimoes:
     push r0
     push r1
     push r2
@@ -600,18 +611,18 @@ ApagaMario:
     push r4
     push r5
 
-    load r0, posAntMario
+    load r0, posAntSimoes
 
-	loadn r1, #tela0Linha0	;Endereço do cenário tela1 + tela2
-	add r2, r1, r0	;r2 = endereço tela0Linha0 + posAntMario
+	loadn r1, #tela0Linha0	    ;Endereço do cenário tela1 + tela2
+	add r2, r1, r0	            ;r2 = endereço tela0Linha0 + posAntSimoes
 
 	loadn r4, #40
-	div r3, r0, r4	;r3 = linha posAntMario
-	add r2, r2, r3	;r2 = endereço tela0Linha0 + posAntMario + posAnt/40
+	div r3, r0, r4	            ;r3 = linha posAntSimoes
+	add r2, r2, r3	            ;r2 = endereço tela0Linha0 + posAntSimoes + posAnt/40
 	
-	loadi r5, r2	;vê o que tinha no cenário
+	loadi r5, r2	            ;vê o que tinha no cenário
 
-    outchar r5, r0         ;desenha o que tinha antes -> sem o Mario
+    outchar r5, r0              ;desenha o que tinha antes -> sem o Simoes
 
     pop r5
     pop r4
@@ -622,68 +633,68 @@ ApagaMario:
     rts
 
 ;-------------------------------------------
-;                 MoveBarril
+;                 MoveTubarao
 ;-------------------------------------------
-MoveBarril:
+MoveTubarao:
 
-    call PosicaoInicialBarril
-    call CairBarril
+    call PosicaoInicialTubarao
+    call CairTubarao
 
     rts
 
-PosicaoInicialBarril:
+PosicaoInicialTubarao:
     push r0
     push r1
     push r2
     push r3
     push r4
 
-    load r0, parametroBarril   ;vê qual barril que está caindo [0 a 9]
-    loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
-    add r3, r3, r0             ;r3 = endereço da FlagCaindo[parametroBarril]
-    loadi r2, r3               ;r2 = valor da FlagCaindo[parametroBarril] 
+    load r0, parametroTubarao       ;vê qual Tubarao que está caindo [0 a 9]
+    loadn r3, #FlagCaindo           ;r3 = endereço da FlagCaindo[0]
+    add r3, r3, r0                  ;r3 = endereço da FlagCaindo[parametroTubarao]
+    loadi r2, r3                    ;r2 = valor da FlagCaindo[parametroTubarao] 
         
     loadn r4, #0
-    cmp r2, r4                 ;Cmp se FlagBarril == 0, se sim, ele tem que cair
+    cmp r2, r4                      ;Cmp se FlagTubarao == 0, se sim, ele tem que cair
     jeq VaiCair
 
-    jmp RtsPosicaoInicialBarril
+    jmp RtsPosicaoInicialTubarao
 
     VaiCair:
 
-        call AcharIncRandBarril 
+        call AcharIncRandTubarao 
         
-        load r0, parametroBarril
-        loadn r3, #IncRandBarril
+        load r0, parametroTubarao
+        loadn r3, #IncRandTubarao
         add r3, r3, r0
-        loadi r1, r3               ;r1 = IncRandBarril[parametroBarril]
+        loadi r1, r3               ;r1 = IncRandTubarao[parametroTubarao]
         
-        loadn r4, #RandBarril      ;r4 = endereço base da tabela
-        add r4, r4, r1             ;r4 = endereço de RandBarril[IncRandBarril[parametroBarril]]
-        loadi r2, r4               ;r2 = RandBarril[IncRandBarril[parametroBarril]] (posição inicial)
+        loadn r4, #RandTubarao     ;r4 = endereço base da tabela
+        add r4, r4, r1             ;r4 = endereço de RandTubarao[IncRandTubarao[parametroTubarao]]
+        loadi r2, r4               ;r2 = RandTubarao[IncRandTubarao[parametroTubarao]] (posição inicial)
         
-        loadn r4, #posBarril
-        add r4, r4, r0             ;r4 = endereço posBarril[parametroBarril]
-        storei r4, r2              ;guarda a posição inicial no endereço posBarril[parametroBarril] 
+        loadn r4, #posTubarao
+        add r4, r4, r0             ;r4 = endereço posTubarao[parametroTubarao]
+        storei r4, r2              ;guarda a posição inicial no endereço posTubarao[parametroTubarao] 
 
         loadn r4, #FlagCaindo
-        add r4, r4, r0             ;endereço da FlagCaindo[parametroBarril]
+        add r4, r4, r0             ;endereço da FlagCaindo[parametroTubarao]
         loadn r0, #1
-        storei r4, r0              ;FlagCaindo[parametroBarril] == 1 porque o Barril já começou a cair
+        storei r4, r0              ;FlagCaindo[parametroTubarao] == 1 porque o Tubarao já começou a cair
         
-        inc r1  ;aumenta o índice IncRandBarril[parametroBarril] (ex: 0 para 1)
+        inc r1                     ;aumenta o índice IncRandTubarao[parametroTubarao] (ex: 0 para 1)
 
         loadn r0, #40
         cmp r1, r0                 ;Compara se o índice já chegou no fim da tabela
-        jne StoreIncBarril
+        jne StoreIncTubarao
 
         ;ZeraIndice:
         loadn r1, #0
 
-        StoreIncBarril:
-            storei r3, r1 ;Ele armazena o novo índice no r3 -> endereço IncRandBarril[parametroBarril]
+        StoreIncTubarao:
+            storei r3, r1          ;Ele armazena o novo índice no r3 -> endereço IncRandTubarao[parametroTubarao]
 
-        RtsPosicaoInicialBarril:
+        RtsPosicaoInicialTubarao:
             pop r4
             pop r3
             pop r2
@@ -691,7 +702,7 @@ PosicaoInicialBarril:
             pop r0
             rts          
 
-CairBarril:
+CairTubarao:
     push r0
     push r1
     push r2
@@ -699,16 +710,16 @@ CairBarril:
     push r4
 
     loadn r0, #0
-    loadn r3, #posBarril
-    load r4, parametroBarril
-    add r3, r3, r4 ;r3 == ENDEREÇO posBarril [parametroBarril] -> não vou mexer mais no r3!! 
-    loadi r2, r3 ;r2 == posBarril[parametroBarril]
+    loadn r3, #posTubarao
+    load r4, parametroTubarao
+    add r3, r3, r4          ;r3 == ENDEREÇO posTubarao [parametroTubarao] -> não vou mexer mais no r3!! 
+    loadi r2, r3            ;r2 == posTubarao[parametroTubarao]
 
-    ;tem que apagar primeiro, pois eu atualizo a posAntBarril no desenhaBarril, ou seja, ele ia desenhar e apagar logo em seguida
-    call ApagaBarril
+    ;tem que apagar primeiro, pois eu atualizo a posAntTubarao no desenhaTubarao, ou seja, ele ia desenhar e apagar logo em seguida
+    call ApagaTubarao
 
     loadn r1, #40
-    add r0, r2, r1 ;Barril desce uma linha
+    add r0, r2, r1          ;Tubarao desce uma linha
 
     ;Comparação se chegou no chão:
         div r4, r0, r1
@@ -716,26 +727,26 @@ CairBarril:
         cmp r4, r1
         jeq Nochao
 
-    call DesenhaBarril
-    storei r3, r0 ;posbarril[parametroBarril] == r0 já na próxima linha
+    call DesenhaTubarao
+    storei r3, r0           ;posTubarao[parametroTubarao] == r0 já na próxima linha
 
     ;Vejo se colidiu com o mário:
-        load r0, posAntMario
+        load r0, posAntSimoes
         cmp r0, r2
         ceq Morreu
     
-    jmp RtsCairBarril
+    jmp RtsCairTubarao
 
     Nochao:
         loadn r0, #0
-        load r1, parametroBarril
+        load r1, parametroTubarao
         loadn r3, #FlagCaindo      ;r3 = endereço da FlagCaindo[0]
-        add r3, r3, r1             ;r3 = endereço da FlagCaindo[parametroBarril]
-        storei r3, r0              ;zera a FlagCaindo[parametroBarril]
+        add r3, r3, r1             ;r3 = endereço da FlagCaindo[parametroTubarao]
+        storei r3, r0              ;zera a FlagCaindo[parametroTubarao]
 
         call ZerarFlag             ;zera a FlagColuna
 
-    RtsCairBarril:
+    RtsCairTubarao:
         pop r4
         pop r3
         pop r2
@@ -743,40 +754,40 @@ CairBarril:
         pop r0
         rts
 
-AcharIncRandBarril:
+AcharIncRandTubarao:
     push r0
     push r1
     push r2
     push r3
     push r4
 
-    load r1, parametroBarril        ;para saber qual barril vai cair
-    loadn r0, #IncRandBarril        ;Endereço do vetor dos índices
-    add r0, r0, r1                  ;r0 == Endereço IncRandBarril[parametroBarril]
-    loadi r2, r0                    ;r2 == IncRandBarril[parametroBarril]
+    load r1, parametroTubarao        ;para saber qual Tubarao vai cair
+    loadn r0, #IncRandTubarao        ;Endereço do vetor dos índices
+    add r0, r0, r1                   ;r0 == Endereço IncRandTubarao[parametroTubarao]
+    loadi r2, r0                     ;r2 == IncRandTubarao[parametroTubarao]
 
     LoopFlags: ;Até achar a flag livre
         loadn r1, #FlagColuna
-        add r1, r1, r2 ;endereço da FlagColuna[r2]
-        loadi r3, r1 ;valor da flag (0 ou 1)
+        add r1, r1, r2               ;endereço da FlagColuna[r2]
+        loadi r3, r1                 ;valor da flag (0 ou 1)
 
         loadn r4, #0
         cmp r3, r4
-        jeq RtsAcharIncRandBarril ;se a flag está desligada, rts
+        jeq RtsAcharIncRandTubarao   ;se a flag está desligada, rts
 
-        inc r2 ;incrementa o índice do barril
+        inc r2                       ;incrementa o índice do Tubarao
 
         ;vê se precisa zerar o índice:
             loadn r1, #40
             cmp r1, r2
-            jne LoopFlags
+            jne LoopFlags            ;39 é o fim da tabela, se chegou no 40, precisa zerar
 
         ;zera o índice:
             loadn r2, #0
             jmp LoopFlags
 
-    RtsAcharIncRandBarril:
-        storei r0, r2 ;r0 tem o endereço do IncRandBarril[parametroBarril]
+    RtsAcharIncRandTubarao:
+        storei r0, r2 ;r0 tem o endereço do IncRandTubarao[parametroTubarao]
 
         call LigarFlag ;Assim que eu acho qual coluna ele vai cair, pode ligar a FlagColuna
 
@@ -792,16 +803,16 @@ LigarFlag:
     push r1
     push r2
 
-    loadn r0, #IncRandBarril
-    load r1, parametroBarril
+    loadn r0, #IncRandTubarao
+    load r1, parametroTubarao
     add r0, r0, r1
-    loadi r2, r0 ;valor do índice(0 a 39) do IncRandBarril[parametroBarril]
+    loadi r2, r0        ;valor do índice(0 a 39) do IncRandTubarao[parametroTubarao]
 
     loadn r1, #FlagColuna
-    add r1, r1, r2 ;Endereço FlagColuna[IncRandBarril[parametroBarril]]
+    add r1, r1, r2      ;Endereço FlagColuna[IncRandTubarao[parametroTubarao]]
 
     loadn r0, #1
-    storei r1, r0 ;Flag Ligada!
+    storei r1, r0       ;Flag Ligada!
 
     pop r2
     pop r1
@@ -814,30 +825,30 @@ ZerarFlag:
     push r2
     push r3
     
-    loadn r0, #IncRandBarril
-    load r1, parametroBarril
+    loadn r0, #IncRandTubarao
+    load r1, parametroTubarao
     add r0, r0, r1
-    loadi r2, r0 ;valor do índice do IncRandBarril[parametroBarril]
+    loadi r2, r0        ;valor do índice do IncRandTubarao[parametroTubarao]
 
-    ;como IncRandBarril sempre aponta já para a próxima coluna
+    ;como IncRandTubarao sempre aponta já para a próxima coluna
     ;confere primeiro, se é zero, caso não seja: r2--
     loadn r3, #0
     cmp r2, r3
-    jne SubIncRandBarril
+    jne SubIncRandTubarao
 
-    loadn r2, #41 ;como os índices são ciclicos, antes de 0 é 5
+    loadn r2, #39       ;como os índices são ciclicos, antes de 0 é 39
 
     jmp DesligaFlag
 
-    SubIncRandBarril:
+    SubIncRandTubarao:
         dec r2
 
     DesligaFlag:
         loadn r1, #FlagColuna
-        add r1, r1, r2 ;endereço FlagColuna[IncRandBarril[parametroBarril]]
+        add r1, r1, r2  ;endereço FlagColuna[IncRandTubarao[parametroTubarao]]
 
         loadn r0, #0
-        storei r1, r0 ;Flag Desligada!
+        storei r1, r0   ;Flag Desligada!
 
         pop r3
         pop r2
@@ -860,93 +871,108 @@ Morreu:
 	loadn r2, #30720  			    ;cor roxa
 	call ImprimeTela
 
-	loadn r2, #0 ;inicializa o contador com 0 
+	loadn r2, #0                    ;inicializa o contador com 0 
 
     loadn r0, #'s'
     loadn r3, #'n'
 
     LoopMorreu:
-        inchar r1 ;lê o que a pessoa escreveu
+        inchar r1                   ;lê o que a pessoa escreveu
     
-        inc r2    ;contador++
+        inc r2                      ;contador++
     
-        cmp r1, r3 ;se ele digitou 'n'
+        cmp r1, r3                  ;se ele digitou 'n'
         jeq fim
 
-        cmp r1, r0 ;se ele digitou 's'
+        cmp r1, r0                  ;se ele digitou 's'
         jeq SimM
 
-        jmp LoopMorreu ;se ele não digitou/digitou outra coisa
+        jmp LoopMorreu              ;se ele não digitou/digitou outra coisa
 
     SimM:
-        ;gera o randômico sempre para o barril 0 -> mais rápido
-		loadn r5, #6 ;tamanho da tabela de randômicos
-		mod r3, r2, r5 ;deixo o valor entre 0 e 5
+        ;gera o randômico sempre para o Tubarao 0 -> mais rápido
+		loadn r5, #40               ;tamanho da tabela de randômicos
+		mod r3, r2, r5              ;deixo o valor entre 0 e 39
 
-		loadn r0, #IncRandBarril ;endereço do índice do barril[0]
-		storei r0, r3 ;guardo o valor aleatório entre 0 e 5, no índice do barril 0
+		loadn r0, #IncRandTubarao   ;endereço do índice do Tubarao[0]
+		storei r0, r3               ;guardo o valor aleatório entre 0 e 5, no índice do Tubarao 0
 
         pop r3
         pop r2
         pop r1
         pop r0
 
-        pop r0 ;desempilha tudo, não vai ter o rts, vai direto no main
+        pop r0                      ;desempilha tudo, não vai ter o rts, vai direto no main
 
         jmp Restart
 
 ;-------------------------------------------
-;          Desenha e Apaga Barril
+;          Desenha e Apaga Tubarao
 ;-------------------------------------------
-DesenhaBarril:
+DesenhaTubarao:
     push r0
     push r1
     push r2
     push r3
+    push r4
 
-    loadn r0, #posBarril
-    load r1, parametroBarril
-    add r0, r1, r0 ;r0 = endereço do posBarril[parametroBarril]
-    loadi r2, r0 ;r2 = valor do posBarril[parametroBarril]
+    loadn r0, #posTubarao
+    load r1, parametroTubarao
+    add r0, r1, r0          ;r0 = endereço do posTubarao[parametroTubarao]
+    loadi r2, r0            ;r2 = valor do posTubarao[parametroTubarao]
 
     loadn r3, #'t'
+    loadn r4, #131072     ;Cor cinza -> tubarão
+    add r3, r3, r4
     outchar r3, r2
 
-    ;Atualiza o posAntBarril
-    loadn r0, #posAntBarril
-    add r0, r0, r1  ;endereço posAntBarril[parametroBarril]
-    storei r0, r2   ;guardo o valor do posBarril[parametroBarril] no endereço do posAntBarril[parametroBarril]
+    ;Atualiza o posAntTubarao
+    loadn r0, #posAntTubarao
+    add r0, r0, r1          ;endereço posAntTubarao[parametroTubarao]
+    storei r0, r2           ;guardo o valor do posTubarao[parametroTubarao] no endereço do posAntTubarao[parametroTubarao]
     
+    pop r4
     pop r3
     pop r2
     pop r1
     pop r0
     rts
 
-ApagaBarril:
+ApagaTubarao:
     push r0
     push r1
     push r2
     push r3
     push r4
     push r5
+    push r6
+    push r7
 
-    loadn r0, #posAntBarril
-    load r1, parametroBarril
+    loadn r0, #posAntTubarao
+    load r1, parametroTubarao
     add r0, r1, r0
-    loadi r2, r0            ;r2 = posAntBarril[parametroBarril]
+    loadi r2, r0            ;r2 = posAntTubarao[parametroTubarao]
+    load r6, posAntSimoes
 
 	loadn r1, #tela0Linha0	;endereço do cenário (tela1 + tela2)
-	add r0, r1, r2	        ;r2 = tela0Linha0 + posAntBarril
+	add r0, r1, r2	        ;r2 = tela0Linha0 + posAntTubarao
 	loadn r4, #40
-	div r3, r2, r4	        ;r3 = linha do posAntBarril
-	add r0, r0, r3	        ;r0 = endereço tela0Linha0 + posAntBarril + linha do posAntBarril
+	div r3, r2, r4	        ;r3 = linha do posAntTubarao
+	add r0, r0, r3	        ;r0 = endereço tela0Linha0 + posAntTubarao + linha do posAntTubarao
 	
 	loadi r5, r0	        ;vê o que tinha nesse endereço
 
+    cmp r6, r2              ;compara se o simões estava antes, para não apagar ele
+    jne ApagaTubarao_Skip
+        loadn r7, #2048     ;cor rosa
+        loadn r5, #':'
+        add r5, r7, r5      ;simões fica rosa
 
-    outchar r5, r2         ;redesenha o que tinha antes -> sem o barril
+    ApagaTubarao_Skip:
+    outchar r5, r2         ;redesenha o que tinha antes -> sem o Tubarao
 
+    pop r7
+    pop r6
     pop r5
     pop r4
     pop r3
@@ -1095,8 +1121,8 @@ ImprimeStr2:
 	push r2	
 	push r3	
 	push r4
-	push r5	
-	push r6	
+	push r5	; protege o r5 na pilha para ser usado na subrotina
+	push r6	; protege o r6 na pilha para ser usado na subrotina
 	
 	
 	loadn r3, #'\0'	; Criterio de parada
@@ -1119,7 +1145,7 @@ ImprimeStr2:
 		jmp ImprimeStr2_Loop
 	
    ImprimeStr2_Sai:	
-	pop r6	
+	pop r6	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
 	pop r5
 	pop r4
 	pop r3
@@ -1135,7 +1161,7 @@ ApagaTela:
 	push r1
 	
 	loadn r0, #1200		; apaga as 1200 posicoes da Tela
-	loadn r1, #' '		; com "espaço"
+	loadn r1, #' '		; com "espaco"
 	
 	   ApagaTela_Loop:	;;label for(r0=1200;r3>0;r3--)
 		dec r0
@@ -1181,7 +1207,7 @@ tela0Linha27 : string "                                        "
 tela0Linha28 : string "                                        "
 tela0Linha29 : string "                                        "	
 
-;Tela 01: Chão + barco
+;Tela 01: Chão
 tela1Linha0  : string "                                        "
 tela1Linha1  : string "                                        "
 tela1Linha2  : string "                                        "
@@ -1279,10 +1305,10 @@ tela3Linha28 : string "                                        "
 tela3Linha29 : string "                                        "
 
 ;Tela menu:
-tela4Linha0  : string "                                        "
-tela4Linha1  : string "                                        "
-tela4Linha2  : string "                                        "
-tela4Linha3  : string "                                        "
+tela4Linha0 : string "                                        "
+tela4Linha1 : string "                                        "
+tela4Linha2 : string "                                        "
+tela4Linha3 : string "                                        "
 tela4Linha4  : string "                                        "
 tela4Linha5  : string "       PRESSIONE ENTER PARA INICIAR     "     
 tela4Linha6  : string "      E RECUPERAR O BARCO DO SIMOES     "
