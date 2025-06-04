@@ -590,7 +590,7 @@ DesenhaSimoes:
     push r2
 
     load r0, posSimoes
-    loadn r2, #2048             ;cor rosa -> Simões
+    loadn r2, #1024             ;cor rosa -> Simões
     loadn r1, ':'               ;caractere do Simões
     add r1, r1, r2              ;Simões + cor 
 
@@ -964,7 +964,7 @@ ApagaTubarao:
 
     cmp r6, r2              ;compara se o simões estava antes, para não apagar ele
     jne ApagaTubarao_Skip
-        loadn r7, #2048     ;cor rosa
+        loadn r7, #1024     ;cor rosa
         loadn r5, #':'
         add r5, r7, r5      ;simões fica rosa
 
